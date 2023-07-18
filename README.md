@@ -1,22 +1,71 @@
-# Inventory-Management_System
+# Inventory Management System
 This project will help small family businesses in Mexico to aid in their decision making and strategy. It will be their first step to digitise their current paper-based system to reduce human errors. 
 
 
+____
 
+# How to
 
 ## How to create a virtual env
 
-```CLI
+```
 python -m venv .venv 
 ```
 
 ## How to enter to the virtual env
 ```
 source ./.venv/bin/activate
+```
+____
 
+
+## Database and user creation
+
+Mac users
+
+```
+ psql
+```
+
+Linux & WLS users
+
+```
+sudo -u postgres psql
+```
+### Create the database in PostgreSQL
+
+```
+CREATE DATABASE db_name;
+```
+
+Connect to the database:
+```
+\c db_name;
+```
+
+Create a user to manage this database:
+```
+
+CREATE USER username WITH PASSWORD 'password';
+```
+
+and grant all permission to the user:
+```
+GRANT ALL PRIVILEGES ON DATABASE db_name TO username;
 ```
 
 
+Link ypur personal db with the app:
+
+1. Create and .env file
+2. Store the URL of the database in  "DATBASE_URL = " 
+3. Store your JWT secret key in "JWT_SECRET_KEY ="
+
+flask --app src/main run 
+or 
+```cd src 
+flask run
+```
 
 
 ## Features/Capabilities: 
