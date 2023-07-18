@@ -20,4 +20,4 @@ class UserSchema(ma.Schema):
 # for a single user
 user_schema = UserSchema(exclude = ['password'])
 # for many users.
-user_schema = user_schema(many=True, exclude = ["password"])
+user_schema = UserSchema(many=True, exclude = ["password"])

@@ -57,7 +57,7 @@ GRANT ALL PRIVILEGES ON DATABASE db_name TO username;
 
 Link ypur personal db with the app:
 
-1. Create and .env file
+1. Create a new file (.env) 
 2. Store the URL of the database in  "DATBASE_URL = " 
 3. Store your JWT secret key in "JWT_SECRET_KEY ="
 
@@ -65,6 +65,11 @@ flask --app src/main run
 or 
 ```cd src 
 flask run
+```
+
+Grant permision to public schema to user:
+```
+GRANT ALL ON SCHEMA public TO username;
 ```
 
 
