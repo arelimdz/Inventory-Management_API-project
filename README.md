@@ -143,46 +143,53 @@ _________
 ### R5. Document all endpoints for your API
 
 
-a) **Stock:** /OWNER/
+* **USER**
 
-* Entry of new product into stock (Create)
-
-stock/ new_item
-
-* Display all product attributes (Read)
-
-stock/ item_id
-
-* Update product (Update)
-
-stock/ item_id / update
-
-* Delete product (Delete)
-
-stock/ item_id/ delete
+    - Register new user
+    - User login
 
 
-According to good practice it is not recommended to remove a product, so a new attribute is added to the Stock_items table to change the status of a product that is not sold by the company to discontinued.
+* **Stock:** /OWNER/
+
+    -  Register new item into the inventory
+
+        stock/ new_item
+
+    - Display all items with their attributes (Read)
+
+        stock/ item_id
+
+    - Update item attributes (Update)
+
+        stock/ item_id / update
+
+    - Delete item (Delete)
+
+        stock/ item_id/ delete
+
+        According to good practice it is not recommended to remove a product, so a new attribute is added to the Stock_items table to change the status of a product that is not sold by the company to discontinued.
 
 
 
-b) **Customer:**
+* **Customer:**
 
-* Entry of a new customer in the customer catalogue(C)
+    - Register new customer in the customer catalogue(C)
 
-custormer/ new_customer
+        custormer/ new_customer
 
-* Display all customers in the customer catalogue: (R)
+    - Display all customers in the customer catalogue: (R)
 
-customer/ all
+        customer/ all
 
-* Display a customer from the customer catalogue (R)
+    - Display a customer from the customer catalogue (R)
 
-customer/ customer_id
+        customer/ customer_id
 
-* Udate customer information (U)
+    - Update customer information (U)
 
-customer/ customer_id/ update
+        customer/ customer_id/ update
+
+
 
 
 c) **Lista de precio** //STAF//

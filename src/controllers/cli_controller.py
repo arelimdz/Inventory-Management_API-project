@@ -24,12 +24,14 @@ def seed_db():
             name="Owner",
             email="admin@admin.com",
             password=bcrypt.generate_password_hash("admin123").decode("utf-8"),
+            role="Manager",
             is_admin=True,
         ),
         User(
             name="Staff1",
             email="staff1@email.com",
             password=bcrypt.generate_password_hash("staff1123").decode("utf-8"),
+            role="Sales Assistant"
         ),
     ]
     db.session.add_all(users)

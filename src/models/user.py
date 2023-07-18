@@ -8,7 +8,8 @@ class User(db.Model):
     name = db.Column(db.String, unique=True, nullable=False )
     email = db.Column(db.String,  unique=True, nullable=False )
     password = db.Column(db.String, nullable=False )
-    role = db.Column(db.String)
+    role = db.Column(db.String, nullable=False)
+    
     is_admin = db.Column(db.Boolean, default=False)
     
 # Create a user schema usign marshmallow to convert the data from the database in a Serializing Json type object
@@ -20,4 +21,4 @@ class UserSchema(ma.Schema):
 # for a single user
 user_schema = UserSchema(exclude = ['password'])
 # for many users.
-user_schema = UserSchema(many=True, exclude = ["password"])
+users_schema = UserSchema(many=True, exclude = ["password"])
