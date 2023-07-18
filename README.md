@@ -240,7 +240,7 @@ Explanation:
 
 <br>
 
-Following Crow's Foot Notation for the modelling of our system we have extended some of our entity attributes and added join tables for the normalisation of our data and to avoid many-to-many type relationships betweent the tables.
+Following Crow's Foot Notation for the modelling of our database system we have extended some of our entity attributes and added join tables for the normalisation of our data and to avoid many-to-many type relationships betweent the tables.
 
 
 <br>
