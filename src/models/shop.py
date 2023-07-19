@@ -1,4 +1,5 @@
 from init import db, ma
+from marshmallow import fields
 
 
 # Declare Shop model and its attributes
@@ -10,11 +11,16 @@ class Shop(db.Model):
     address = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
 
+    # Register model relationships
+    users = db.relationship("User", back_populates="shop")
+
 
 # Create a Shop schema usign marshmallow to convert the data from the database in a Serializing Json type object
 class ShopSchema(ma.Schema):
+    users = fields.List(fields.Nested("UserSchema", exclude=["shop"]))
+
     class Meta:
-        fields = ("id", "shop_name", "address", "description")
+        fields = ("id", "shop_name", "address", "description", "users")
 
 
 # Declare Shop schema to be able to retrieve information to the frontend

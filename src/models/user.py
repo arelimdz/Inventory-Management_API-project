@@ -1,24 +1,36 @@
 from init import db, ma
+from marshmallow import fields
+
 
 # Declare user model and its attributes
 class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True, nullable=False )
-    email = db.Column(db.String,  unique=True, nullable=False )
-    password = db.Column(db.String, nullable=False )
+    name = db.Column(db.String, unique=True, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
+    password = db.Column(db.String, nullable=False)
     role = db.Column(db.String, nullable=False)
-    
+
     is_admin = db.Column(db.Boolean, default=False)
-    
+
+    # Register Foreign Key
+    shop_id = db.Column(db.Integer, db.ForeignKey("shops.id", nullable=False))
+
+    # Register model relationships
+    shop = db.RelationshipProperty("Shop", back_populates="users")
+
+
 # Create a user schema usign marshmallow to convert the data from the database in a Serializing Json type object
 class UserSchema(ma.Schema):
-    class Meta:
-        fields = ("id", "name", "email", "password", "role", "is_admin")
+    shop = fields.Nested("ShopSchema", only=["name", "address"])
 
-# Declare user schema to be able to retrieve information to the frontend 
+    class Meta:
+        fields = ("id", "name", "email", "password", "role", "is_admin", "shop")
+
+
+# Declare user schema to be able to retrieve information to the frontend
 # for a single user
-user_schema = UserSchema(exclude = ['password'])
+user_schema = UserSchema(exclude=["password"])
 # for many users.
-users_schema = UserSchema(many=True, exclude = ["password"])
+users_schema = UserSchema(many=True, exclude=["password"])
