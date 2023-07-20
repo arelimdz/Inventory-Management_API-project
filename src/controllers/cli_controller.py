@@ -1,7 +1,7 @@
 from flask import Blueprint
 from init import db, bcrypt
 from models.user import User
-from models.stock_item import Stock_item
+from models.stock_item import StockItem
 
 db_commands = Blueprint("db", __name__)
 
@@ -38,7 +38,7 @@ def seed_db():
     db.session.add_all(users)
 
     stock_items = [
-        Stock_item(
+        StockItem(
             item_name="Wash&Wear White",
             item_description="Low Sheen water-base paint for interior walls",
             item_brand="Dulux",
@@ -50,7 +50,7 @@ def seed_db():
             minimum_stock=50,
             sku="DWBWW100WH",
         ),
-        Stock_item(
+        StockItem(
             item_name="Super Enamel White",
             item_description="Semi Gloss is a high quality and hard-wearing oil-based interior enamel",
             item_brand="Dulux",
@@ -69,4 +69,3 @@ def seed_db():
     db.session.commit()
 
     print("Tables seeded")
-

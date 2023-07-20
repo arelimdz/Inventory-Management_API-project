@@ -1,10 +1,9 @@
-from init import db, ma
-from marshmallow import fields
+from init import db
 from .CamelCasedSchema import CamelCasedSchema
 
 
-# Declare Stock_items model and its attributes
-class Stock_item(db.Model):
+# Declare StockItem model and its attributes
+class StockItem(db.Model):
     __tablename__ = "stock_items"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -32,8 +31,9 @@ class Stock_item(db.Model):
     # outgoing_stocks = db.relationship("Outgoing_stock", back_populates="stock_item")
 
 
-# Create a stock_item schema usign marshmallow to convert the data from the database in a Serializing Json type object
-class Stock_itemSchema(CamelCasedSchema):
+# Create a stock_item schema usign marshmallow to convert the data
+# from the database in a Serializing Json type object
+class StockItemSchema(CamelCasedSchema):
     # incoming_stocks = fields.List(
     #     fields.Nested("Incoming_stockSchema", exclude=["stock_item"])
     # )
@@ -66,6 +66,6 @@ class Stock_itemSchema(CamelCasedSchema):
 
 # Declare stock_item schema to be able to retrieve information to the frontend
 # for a single stock_item
-stock_item_schema = Stock_itemSchema()
+stock_item_schema = StockItemSchema()
 # for many stock_items.
-stock_items_schema = Stock_itemSchema(many=True)
+stock_items_schema = StockItemSchema(many=True)
