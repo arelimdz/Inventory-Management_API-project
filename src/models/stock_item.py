@@ -20,6 +20,7 @@ class Stock_item(db.Model):
     special_tax = db.Column(
         db.Float, default=10
     )  # Some products migth have special tax
+    status = db.column(db.String, default="Active")
 
     # # Register Foreign Key
     # shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"), nullable=False)
@@ -45,18 +46,21 @@ class Stock_itemSchema(ma.Schema):
             "id",
             "item_name",
             "item_description",
-            "item_brand" "size",
+            "item_brand",
+            "size",
+            "sku",
             "category",
             "quantity",
             "unit_price",
             "markup_pct",
             "minimum_stock",
-            "sku",
             "special_tax",
+            "status",
             # "shop",
             # "incoming_stocks",
             # "outgoing_stocks"
         )
+        ordered = True
 
 
 # Declare stock_item schema to be able to retrieve information to the frontend
