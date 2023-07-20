@@ -1,5 +1,6 @@
 from init import db, ma
 from marshmallow import fields
+from .CamelCasedSchema import CamelCasedSchema
 
 
 # Declare Stock_items model and its attributes
@@ -20,7 +21,7 @@ class Stock_item(db.Model):
     special_tax = db.Column(
         db.Float, default=10
     )  # Some products migth have special tax
-    status = db.column(db.String, default="Active")
+    status = db.Column(db.String, default="Active")
 
     # # Register Foreign Key
     # shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"), nullable=False)
@@ -32,7 +33,7 @@ class Stock_item(db.Model):
 
 
 # Create a stock_item schema usign marshmallow to convert the data from the database in a Serializing Json type object
-class Stock_itemSchema(ma.Schema):
+class Stock_itemSchema(CamelCasedSchema):
     # incoming_stocks = fields.List(
     #     fields.Nested("Incoming_stockSchema", exclude=["stock_item"])
     # )

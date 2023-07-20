@@ -5,7 +5,7 @@ from models.stock_item import Stock_item, stock_item_schema, stock_items_schema
 from models.user import User
 import functools
 
-stock_items_bp = Blueprint("stock_items", __name__, url_prefix="/stock_items")
+stock_items_bp = Blueprint("stockItems", __name__, url_prefix="/stockItems")
 
 
 @stock_items_bp.route("/")
@@ -25,7 +25,7 @@ def get_one_stock_item(id):
         return {"error": f"Item with id {id} not found"}, 404
 
 
-@stock_items_bp.route("/new_item", methods=["POST"])
+@stock_items_bp.route("/", methods=["POST"])
 @jwt_required()
 def add_new_item():
     # Access to the information from the frontend and stored it in the variable body_data
