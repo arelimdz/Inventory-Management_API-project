@@ -1,5 +1,5 @@
 from init import db, ma
-from marshmallow import fields
+# from marshmallow import fields
 
 
 # Declare customer model and its attributes
@@ -12,7 +12,7 @@ class Customer(db.Model):
     address = db.Column(db.String, nullable=False)
     city = db.Column(db.String, nullable=False)
     phone_number = db.Column(db.String, nullable=False)
-    authorized_discount = db.Column(db.Float, default=0)
+    authorised_discount = db.Column(db.Float, default=0)
 
     # # Register model relationships
     # receipts = db.relationship("Receipt", back_populates="customer")
@@ -30,7 +30,7 @@ class CustomerSchema(ma.Schema):
             "address",
             "City",
             "phone_number",
-            "authorized_discount",
+            "authorised_discount",
             # "receipts",
         )
 
