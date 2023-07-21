@@ -2,6 +2,7 @@ from flask import Blueprint
 from init import db, bcrypt
 from models.user import User
 from models.stock_item import StockItem
+from models.customer import Customer
 
 db_commands = Blueprint("db", __name__)
 
@@ -66,6 +67,25 @@ def seed_db():
         ),
     ]
     db.session.add_all(stock_items)
+
+    customers = [
+        Customer(
+            name="David Lee",
+            email="dlee@email.com",
+            address="Example St",
+            city="Melbourne",
+            phone_number="00112233",
+            authorised_discount=5.0,
+        ),
+        Customer(
+            name="Margaret Milo",
+            email="mmilo@email.com",
+            address="Example Av",
+            city="Geelong",
+            phone_number="44556677",
+        ),
+    ]
+    db.session.add_all(customers)
     db.session.commit()
 
     print("Tables seeded")

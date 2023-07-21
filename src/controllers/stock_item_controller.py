@@ -1,8 +1,8 @@
 from flask import Blueprint, request
 from init import db
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required
 from models.stock_item import StockItem, stock_item_schema, stock_items_schema
-from models.user import User
+from controllers.auth_controller import authorise_as_admin
 
 stock_items_blueprint = Blueprint("stockItems", __name__, url_prefix="/stockItems")
 
@@ -89,10 +89,3 @@ def update_stock_item(id):
         return stock_item_schema.dump(stock_item)
     else:
         return {"error": f"Stock Item with id {id} not found"}, 404
-
-
-def authorise_as_admin():
-    user_id = get_jwt_identity()
-    stmt = db.select(User).filter_by(id=user_id)
-    user = db.session.scalar(stmt)
-    return user.is_admin
