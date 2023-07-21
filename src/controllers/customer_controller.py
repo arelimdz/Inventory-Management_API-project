@@ -7,9 +7,27 @@ from controllers.auth_controller import authorise_as_admin
 customers_blueprint = Blueprint("customers", __name__, url_prefix="/customers")
 
 
+@customers_blueprint.route("/", methods=["GET"])
+def get_all_customers():
+    stmt = db.select(Customer).order_by(Customer.id)
+    customers = db.session.scalars(stmt)
+    return customers_schema.dump(customers)
+
+
+@customers_blueprint.route("/<int:id>", methods=["GET"])
+def get_one_customers(id):
+    stmt = db.select(Customer).filter_by(id=id)
+    customer = db.session.scalar(stmt)
+    if customer:
+        return customer_schema.dump(customer)
+    else:
+        return {"error": f"Customer with id {id} not found"}, 404
+
+
 @customers_blueprint.route("/", methods=["POST"])
 @jwt_required()
 def add_new_customer():
+    # Check if user is admin
     is_admin = authorise_as_admin()
     if not is_admin:
         return {"error": "Only The Shop Manager can register new customers"}, 403
