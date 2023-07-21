@@ -30,13 +30,12 @@ def add_new_customer():
     # Check if user is admin
     is_admin = authorise_as_admin()
     if not is_admin:
-        return {"error": "Only The Shop Manager can register new customers"}, 403
+        return {"error": "Only Shop Manager can register new customers"}, 403
 
-    # Access to the information from the frontend and
-    # stored it in the variable body_data
+    # Access to frontend data
     body_data = customer_schema.load(request.get_json())
 
-    # Create a new Customer model instance
+    # Create a new Customer model instance using frontend data
     customer = Customer(
         name=body_data.get("name"),
         email=body_data.get("email"),
@@ -47,7 +46,38 @@ def add_new_customer():
     )
     # Add that customer to the session
     db.session.add(customer)
-    # Commit
+    # Commit session
     db.session.commit()
     # Respond to the client
     return customer_schema.dump(customer), 201
+
+
+@customers_blueprint.route("/<int:id>", methods=["PATCH", "PUT"])
+@jwt_required()
+def update_customer(id):
+    # Check if user is admin
+    is_admin = authorise_as_admin()
+    if not is_admin:
+        return {"error": "Only Shop Manager can update customers information"}, 403
+
+    # Access to frontend data and stored data in the variable body_data
+    body_data = customer_schema.load(request.get_json(), partial=True)
+    stmt = db.select(Customer).filter_by(id=id)
+    customer = db.session.scalar(stmt)
+    # Check if customer exist in the database
+    if customer:
+        # Update customer information in the database with data receive from frontend
+        customer.name = (body_data.get("name") or customer.name,)
+        customer.email = (body_data.get("email") or customer.email,)
+        customer.address = (body_data.get("address") or customer.address,)
+        customer.city = (body_data.get("city") or customer.city,)
+        customer.phone_number = (
+            body_data.get("phone_number") or customer.phone_number,
+        )
+        customer.authorised_discount = (
+            body_data.get("authorised_discount") or customer.authorised_discount,
+        )
+        # Respond to the client
+        return customer_schema.dump(customer)
+    else:
+        return {"error": f"Customer with id {id} not found"}, 404
