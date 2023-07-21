@@ -1,4 +1,6 @@
-from init import db, ma
+from init import db
+from .CamelCasedSchema import CamelCasedSchema
+
 # from marshmallow import fields
 
 
@@ -19,7 +21,7 @@ class Customer(db.Model):
 
 
 # Create a customer schema usign marshmallow to convert the data from the database in a Serializing Json type object
-class CustomerSchema(ma.Schema):
+class CustomerSchema(CamelCasedSchema):
     # receipts = fields.List(fields.Nested("ReceiptSchema", exclude=["customer"]))
 
     class Meta:
@@ -28,7 +30,7 @@ class CustomerSchema(ma.Schema):
             "name",
             "email",
             "address",
-            "City",
+            "city",
             "phone_number",
             "authorised_discount",
             # "receipts",

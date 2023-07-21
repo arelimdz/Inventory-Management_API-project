@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from init import db, bcrypt
 from models.user import User, user_schema
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity
 from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
 from datetime import timedelta
@@ -39,7 +39,6 @@ def auth_registrer():
             return {"error": f"The {err.orig.diag.column_name} is required"}, 409
 
 
-
 @auth_blueprint.route("/login", methods=["POST"])
 def auth_login():
     body_data = request.get_json()
@@ -47,9 +46,18 @@ def auth_login():
     # find the user by email address
     stmt = db.select(User).filter_by(email=body_data.get("email"))
     user = db.session.scalar(stmt)
-    # If user exists and if password is correct 
+    # If user exists and if password is correct
     if user and bcrypt.check_password_hash(user.password, body_data.get("password")):
-        token = create_access_token(identity=str(user.id), expires_delta=(timedelta(days=1)))
-        return {'email': user.email, 'token': token, 'is_admin': user.is_admin}
+        token = create_access_token(
+            identity=str(user.id), expires_delta=(timedelta(days=1))
+        )
+        return {"email": user.email, "token": token, "is_admin": user.is_admin}
     else:
-        return {'error': "Invalid email or password"}, 401
+        return {"error": "Invalid email or password"}, 401
+
+
+def authorise_as_admin():
+    user_id = get_jwt_identity()
+    stmt = db.select(User).filter_by(id=user_id)
+    user = db.session.scalar(stmt)
+    return user.is_admin
