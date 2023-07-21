@@ -1,4 +1,5 @@
 from init import db
+from marshmallow import fields
 from .CamelCasedSchema import CamelCasedSchema
 
 
@@ -22,12 +23,12 @@ class StockItem(db.Model):
     )  # Some products migth have special tax
     status = db.Column(db.String, default="Active")
 
-    # # Register Foreign Key
-    # shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"), nullable=False)
+    # Register Foreign Key
+    shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"), nullable=False)
 
     # # Register model relationships
     # incoming_stocks = db.relationship("Incoming_stock", back_populates="stock_item")
-    # shop = db.relationship("Shop", back_populates="stock_items")
+    shop = db.relationship("Shop", back_populates="stock_items")
     # outgoing_stocks = db.relationship("Outgoing_stock", back_populates="stock_item")
 
 
@@ -37,7 +38,7 @@ class StockItemSchema(CamelCasedSchema):
     # incoming_stocks = fields.List(
     #     fields.Nested("Incoming_stockSchema", exclude=["stock_item"])
     # )
-    # shop = fields.Nested("ShopSchema", only=["name", "address"])
+    shop = fields.Nested("ShopSchema", only=["shop_name", "address"])
     # outgoing_stocks = fields.List(
     #     fields.Nested("Outgoing_stockSchema", exclude=["stock_item"])
     # )
@@ -57,7 +58,7 @@ class StockItemSchema(CamelCasedSchema):
             "minimum_stock",
             "special_tax",
             "status",
-            # "shop",
+            "shop",
             # "incoming_stocks",
             # "outgoing_stocks"
         )

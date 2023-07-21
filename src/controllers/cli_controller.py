@@ -67,6 +67,7 @@ def seed_db():
             markup_pct=15.0,
             minimum_stock=50,
             sku="DWBWW100WH",
+            shop=shops[0],
         ),
         StockItem(
             item_name="Super Enamel White",
@@ -81,6 +82,7 @@ def seed_db():
             sku="DOBSE400WH",
             special_tax=15,
             status="Discontinued",
+            shop=shops[1],
         ),
     ]
     db.session.add_all(stock_items)

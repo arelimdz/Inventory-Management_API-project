@@ -14,11 +14,15 @@ class Shop(db.Model):
 
     # Register model relationships
     users = db.relationship("User", back_populates="shop")
+    stock_items = db.relationship("StockItem", back_populates="shop")
 
 
 # Create a marshmallow Shop schema
 class ShopSchema(CamelCasedSchema):
     users = fields.List(fields.Nested("UserSchema", exclude=["shop"]))
+    stock_items = fields.List(
+        fields.Nested("StockItemSchema", only=["item_name", "size", "quantity", "sku"])
+    )
 
     class Meta:
         fields = ("id", "shop_name", "address", "description", "users")

@@ -16,7 +16,7 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, default=False)
 
     # Register Foreign Key
-    shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"))
+    shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"), nullable=False)
 
     # Register model relationships
     shop = db.RelationshipProperty("Shop", back_populates="users")
