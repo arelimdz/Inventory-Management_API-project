@@ -21,5 +21,4 @@ def create_app():
     app.register_blueprint(db_commands)
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(stock_items_blueprint)
-
     return app
