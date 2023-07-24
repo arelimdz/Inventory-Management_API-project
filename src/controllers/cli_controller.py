@@ -7,6 +7,8 @@ from models.shop import Shop
 
 db_commands = Blueprint("db", __name__)
 
+# Create cli commands to test Models
+
 
 @db_commands.cli.command("create")
 def create_db():
@@ -20,6 +22,7 @@ def drop_db():
     print("Tables dropped")
 
 
+# Insert test data to test Models
 @db_commands.cli.command("seed")
 def seed_db():
     shops = [

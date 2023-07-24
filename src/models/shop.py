@@ -19,7 +19,7 @@ class Shop(db.Model):
 
 # Create a marshmallow Shop schema
 class ShopSchema(CamelCasedSchema):
-    users = fields.List(fields.Nested("UserSchema", exclude=["shop"]))
+    users = fields.List(fields.Nested("UserSchema", exclude=["shop", "password"]))
     stock_items = fields.List(
         fields.Nested("StockItemSchema", only=["item_name", "size", "quantity", "sku"])
     )

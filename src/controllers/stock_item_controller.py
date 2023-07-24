@@ -14,7 +14,7 @@ def get_all_stock_items():
     return stock_items_schema.dump(stock_items)
 
 
-@stock_items_blueprint.route("/<int:id>")
+@stock_items_blueprint.route("/<int:id>",  methods=["GET"])
 def get_one_stock_item(id):
     stmt = db.select(StockItem).filter_by(id=id)
     stock_item = db.session.scalar(stmt)
