@@ -1,4 +1,5 @@
 from init import db
+from marshmallow import fields
 from .CamelCasedSchema import CamelCasedSchema
 
 
@@ -14,20 +15,20 @@ class StockItem(db.Model):
     category = db.Column(db.String, nullable=False)
     quantity = db.Column(db.Integer, default=0)
     unit_price = db.Column(db.Float, nullable=False)
-    markup_pct = db.Column(db.Float)
-    minimum_stock = db.Column(db.Integer)
-    sku = db.Column(db.String, nullable=False)  # Supplier SKU
+    markup_pct = db.Column(db.Float, nullable=False)
+    minimum_stock = db.Column(db.Integer, nullable=False)
+    sku = db.Column(db.String, nullable=False,  unique=True,)  # Supplier SKU
     special_tax = db.Column(
         db.Float, default=10
     )  # Some products migth have special tax
     status = db.Column(db.String, default="Active")
 
-    # # Register Foreign Key
-    # shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"), nullable=False)
+    # Register Foreign Key
+    shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"), nullable=False)
 
     # # Register model relationships
     # incoming_stocks = db.relationship("Incoming_stock", back_populates="stock_item")
-    # shop = db.relationship("Shop", back_populates="stock_items")
+    shop = db.relationship("Shop", back_populates="stock_items")
     # outgoing_stocks = db.relationship("Outgoing_stock", back_populates="stock_item")
 
 
@@ -37,7 +38,7 @@ class StockItemSchema(CamelCasedSchema):
     # incoming_stocks = fields.List(
     #     fields.Nested("Incoming_stockSchema", exclude=["stock_item"])
     # )
-    # shop = fields.Nested("ShopSchema", only=["name", "address"])
+    shop = fields.Nested("ShopSchema", only=["shop_name", "address"])
     # outgoing_stocks = fields.List(
     #     fields.Nested("Outgoing_stockSchema", exclude=["stock_item"])
     # )
@@ -57,7 +58,7 @@ class StockItemSchema(CamelCasedSchema):
             "minimum_stock",
             "special_tax",
             "status",
-            # "shop",
+            "shop_id",
             # "incoming_stocks",
             # "outgoing_stocks"
         )

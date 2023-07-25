@@ -1,5 +1,6 @@
-from init import db, ma
+from init import db
 from .CamelCasedSchema import CamelCasedSchema
+from marshmallow import fields
 
 
 # Declare user model and its attributes
@@ -14,11 +15,19 @@ class User(db.Model):
 
     is_admin = db.Column(db.Boolean, default=False)
 
+    # Register Foreign Key
+    shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"), nullable=False)
 
-# Create a user schema usign marshmallow to convert the data from the database in a Serializing Json type object
+    # Register model relationships
+    shop = db.RelationshipProperty("Shop", back_populates="users")
+
+
+# Create a marshmallow User schema
 class UserSchema(CamelCasedSchema):
+    shop = fields.Nested("ShopSchema", only=["shop_name", "address"])
+
     class Meta:
-        fields = ("id", "name", "email", "password", "role", "is_admin")
+        fields = ("id", "name", "email", "password", "role", "is_admin", "shop")
 
 
 # Declare user schema to be able to retrieve information to the frontend

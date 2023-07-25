@@ -5,6 +5,7 @@ from controllers.cli_controller import db_commands
 from controllers.auth_controller import auth_blueprint
 from controllers.stock_item_controller import stock_items_blueprint
 from controllers.customer_controller import customers_blueprint
+from controllers.shop_controller import shops_blueprint
 
 
 def create_app():
@@ -23,5 +24,5 @@ def create_app():
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(stock_items_blueprint)
     app.register_blueprint(customers_blueprint)
-
+    app.register_blueprint(shops_blueprint)
     return app

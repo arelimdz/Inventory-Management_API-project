@@ -3,8 +3,11 @@ from init import db, bcrypt
 from models.user import User
 from models.stock_item import StockItem
 from models.customer import Customer
+from models.shop import Shop
 
 db_commands = Blueprint("db", __name__)
+
+# Create cli commands to test Models
 
 
 @db_commands.cli.command("create")
@@ -19,8 +22,23 @@ def drop_db():
     print("Tables dropped")
 
 
+# Insert test data to test Models
 @db_commands.cli.command("seed")
 def seed_db():
+    shops = [
+        Shop(
+            shop_name="The Painter house",
+            address="The corner St, Melbourne",
+            description="Retail paint shop specialising in car paints",
+        ),
+        Shop(
+            shop_name="Random Paint Shop",
+            address="Somewhere far away St, Adelaide",
+            description="Retail shop for all kinds of paints",
+        ),
+    ]
+    db.session.add_all(shops)
+
     users = [
         User(
             name="Owner",
@@ -28,12 +46,14 @@ def seed_db():
             password=bcrypt.generate_password_hash("admin123").decode("utf-8"),
             role="Manager",
             is_admin=True,
+            shop=shops[0],
         ),
         User(
             name="Staff1",
             email="staff1@email.com",
             password=bcrypt.generate_password_hash("staff1123").decode("utf-8"),
             role="Sales Assistant",
+            shop=shops[0],
         ),
     ]
     db.session.add_all(users)
@@ -50,6 +70,7 @@ def seed_db():
             markup_pct=15.0,
             minimum_stock=50,
             sku="DWBWW100WH",
+            shop=shops[0],
         ),
         StockItem(
             item_name="Super Enamel White",
@@ -64,6 +85,7 @@ def seed_db():
             sku="DOBSE400WH",
             special_tax=15,
             status="Discontinued",
+            shop=shops[1],
         ),
     ]
     db.session.add_all(stock_items)
@@ -86,6 +108,7 @@ def seed_db():
         ),
     ]
     db.session.add_all(customers)
+
     db.session.commit()
 
     print("Tables seeded")
