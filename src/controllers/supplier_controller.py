@@ -49,3 +49,29 @@ def add_new_supplier():
     # Respond to the client
     return supplier_schema.dump(supplier), 201
 
+
+@suppliers_blueprint.route("/<int:id>", methods=["PATCH", "PUT"])
+@jwt_required()
+def update_supplier(id):
+    # Check if user is admin
+    is_admin = authorise_as_admin()
+    if not is_admin:
+        return {"error": "Only Shop Manager can update suppliers information"}, 403
+
+    # Access to frontend data and stored data in the variable body_data
+    body_data = supplier_schema.load(request.get_json(), partial=True)
+    stmt = db.select(Supplier).filter_by(id=id)
+    supplier = db.session.scalar(stmt)
+    # Check if supplier exist in the database
+    if supplier:
+        # Update supplier information in the database with data receive from frontend
+        supplier.name = body_data.get("name") or supplier.name
+        supplier.email = body_data.get("email") or supplier.email
+        supplier.address = body_data.get("address") or supplier.address
+        supplier.phone_number = (
+            body_data.get("phone_number") or supplier.phone_number,
+        )
+        # Respond to the client
+        return supplier_schema.dump(supplier)
+    else:
+        return {"error": f"Supplier with id {id} not found"}, 404
