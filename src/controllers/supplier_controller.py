@@ -23,3 +23,29 @@ def get_one_suppliers(id):
     else:
         return {"error": f"Supplier with id {id} not found"}, 404
 
+
+@suppliers_blueprint.route("/", methods=["POST"])
+@jwt_required()
+def add_new_supplier():
+    # Check if user is admin
+    is_admin = authorise_as_admin()
+    if not is_admin:
+        return {"error": "Only Shop Manager can register new suppliers"}, 403
+
+    # Access to frontend data
+    body_data = supplier_schema.load(request.get_json())
+
+    # Create a new Supplier model instance using frontend data
+    supplier = Supplier(
+        name=body_data.get("name"),
+        email=body_data.get("email"),
+        address=body_data.get("address"),
+        phone_number=body_data.get("phone_number"),
+    )
+    # Add that supplier to the session
+    db.session.add(supplier)
+    # Commit session
+    db.session.commit()
+    # Respond to the client
+    return supplier_schema.dump(supplier), 201
+
