@@ -1,7 +1,6 @@
 from init import db
 from .CamelCasedSchema import CamelCasedSchema
-
-# from marshmallow import fields
+from marshmallow import fields
 
 
 # Declare customer model and its attributes
@@ -16,13 +15,13 @@ class Customer(db.Model):
     phone_number = db.Column(db.String, nullable=False)
     authorised_discount = db.Column(db.Float, default=0)
 
-    # # Register model relationships
-    # receipts = db.relationship("Receipt", back_populates="customer")
+    # Register model relationships
+    receipts = db.relationship("Receipt", back_populates="customer")
 
 
-# Create a customer schema usign marshmallow to convert the data from the database in a Serializing Json type object
+# Create a customer schema usign marshmallow
 class CustomerSchema(CamelCasedSchema):
-    # receipts = fields.List(fields.Nested("ReceiptSchema", exclude=["customer"]))
+    receipts = fields.List(fields.Nested("ReceiptSchema", exclude=["customer"]))
 
     class Meta:
         fields = (
@@ -33,7 +32,7 @@ class CustomerSchema(CamelCasedSchema):
             "city",
             "phone_number",
             "authorised_discount",
-            # "receipts",
+            "receipts",
         )
 
 

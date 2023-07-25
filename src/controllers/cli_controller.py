@@ -5,6 +5,8 @@ from models.stock_item import StockItem
 from models.customer import Customer
 from models.shop import Shop
 from models.supplier import Supplier
+from models.receipt import Receipt
+from datetime import date
 
 db_commands = Blueprint("db", __name__)
 
@@ -126,6 +128,23 @@ def seed_db():
     ]
     db.session.add_all(suppliers)
 
+    receipts = [
+        Receipt(
+            date=date.today(),
+            total=124.0,
+            payment_method="Card",
+            purchase_type="Credit",
+            customer=customers[0],
+        ),
+        Receipt(
+            date=date.today(),
+            total=900.5,
+            payment_method="Cash",
+            purchase_type="One-off payment",
+            customer=customers[0],
+        ),
+    ]
+    db.session.add_all(receipts)
     db.session.commit()
 
     print("Tables seeded")
