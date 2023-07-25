@@ -15,9 +15,9 @@ class StockItem(db.Model):
     category = db.Column(db.String, nullable=False)
     quantity = db.Column(db.Integer, default=0)
     unit_price = db.Column(db.Float, nullable=False)
-    markup_pct = db.Column(db.Float)
-    minimum_stock = db.Column(db.Integer)
-    sku = db.Column(db.String, nullable=False)  # Supplier SKU
+    markup_pct = db.Column(db.Float, nullable=False)
+    minimum_stock = db.Column(db.Integer, nullable=False)
+    sku = db.Column(db.String, nullable=False,  unique=True,)  # Supplier SKU
     special_tax = db.Column(
         db.Float, default=10
     )  # Some products migth have special tax
@@ -58,7 +58,7 @@ class StockItemSchema(CamelCasedSchema):
             "minimum_stock",
             "special_tax",
             "status",
-            "shop",
+            "shop_id",
             # "incoming_stocks",
             # "outgoing_stocks"
         )
