@@ -67,15 +67,13 @@ def update_customer(id):
     # Check if customer exist in the database
     if customer:
         # Update customer information in the database with data receive from frontend
-        customer.name = (body_data.get("name") or customer.name,)
-        customer.email = (body_data.get("email") or customer.email,)
-        customer.address = (body_data.get("address") or customer.address,)
-        customer.city = (body_data.get("city") or customer.city,)
-        customer.phone_number = (
-            body_data.get("phone_number") or customer.phone_number,
-        )
+        customer.name = body_data.get("name") or customer.name
+        customer.email = body_data.get("email") or customer.email
+        customer.address = body_data.get("address") or customer.address
+        customer.city = body_data.get("city") or customer.city
+        customer.phone_number = body_data.get("phone_number") or customer.phone_number
         customer.authorised_discount = (
-            body_data.get("authorised_discount") or customer.authorised_discount,
+            body_data.get("authorised_discount") or customer.authorised_discount
         )
         # Respond to the client
         return customer_schema.dump(customer)

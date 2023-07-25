@@ -4,6 +4,7 @@ from models.user import User
 from models.stock_item import StockItem
 from models.customer import Customer
 from models.shop import Shop
+from models.supplier import Supplier
 
 db_commands = Blueprint("db", __name__)
 
@@ -108,6 +109,22 @@ def seed_db():
         ),
     ]
     db.session.add_all(customers)
+
+    suppliers = [
+        Supplier(
+            name="Dulux Company",
+            email="dulux_supplier@email.com",
+            phone_number="123987",
+            address="Dulux St, Melbourne",
+        ),
+        Supplier(
+            name="Sherwin-Williams",
+            email="sw_supplier@email.com",
+            phone_number="987098",
+            address="Creations St, Sydney",
+        ),
+    ]
+    db.session.add_all(suppliers)
 
     db.session.commit()
 
