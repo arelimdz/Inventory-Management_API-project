@@ -9,7 +9,7 @@ from psycopg2 import errorcodes
 shops_blueprint = Blueprint("shop", __name__, url_prefix="/shops")
 
 
-# Return information af all shop including all shop users
+# Return information af all shop
 @shops_blueprint.route("/", methods=["GET"])
 def get_all_shops():
     stmt = db.select(Shop)
@@ -28,6 +28,7 @@ def get_one_shop(id):
         return {"error": f"Shop with id {id} not found"}
 
 
+# Create a new shop
 @shops_blueprint.route("/", methods=["POST"])
 @jwt_required()
 def add_new_shop():
@@ -35,11 +36,10 @@ def add_new_shop():
     is_admin = authorise_as_admin()
     if not is_admin:
         return {"error": "Only Shop Manager can add new shop"}, 403
-    # Access to the information from the frontend and
-    # stored it in the variable body_data
+    # Access to the information from the frontend
     try:
         body_data = shop_schema.load(request.get_json())
-        
+
         # Create a new Shop model instance
         shop = Shop(
             shop_name=body_data.get("shop_name"),
@@ -57,4 +57,3 @@ def add_new_shop():
             return {"error": "Shop name already exist"}, 409
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             return {"error": f"The {err.orig.diag.column_name} is required"}, 409
-        

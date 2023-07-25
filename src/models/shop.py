@@ -25,7 +25,7 @@ class ShopSchema(CamelCasedSchema):
     )
 
     class Meta:
-        fields = ("id", "shop_name", "address", "description", "users", "shops")
+        fields = ("id", "shop_name", "address", "description", "users", "shops", "stock_items")
 
 
 # Declare Shop schema to be able to retrieve information to the frontend
