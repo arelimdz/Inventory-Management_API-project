@@ -64,9 +64,8 @@ class StockItemSchema(CamelCasedSchema):
             "status",
             "shop_id",
             # "incoming_stocks",
-            # "outgoing_stocks",
+            "outgoing_stock",
         )
-        ordered = True
 
 
 # Declare stock_item schema to be able to retrieve information to the frontend

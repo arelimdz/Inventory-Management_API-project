@@ -25,7 +25,7 @@ class OutgoingStockSchema(CamelCasedSchema):
     stock_item = fields.Nested(
         "StockItemSchema",
         exclude=[
-            "profit_percentage",
+            "markup_pct",
             "minimum_stock",
             # "incoming_stock",
             "outgoing_stock",

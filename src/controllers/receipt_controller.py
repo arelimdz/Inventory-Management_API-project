@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from init import db
 from flask_jwt_extended import jwt_required
 from models.receipt import Receipt, receipt_schema, receipts_schema
+
 # from controllers.auth_controller import authorise_as_admin
 from datetime import date
 
@@ -19,8 +20,20 @@ def get_all_receipts():
 def get_one_receipts(id):
     stmt = db.select(Receipt).filter_by(id=id)
     receipt = db.session.scalar(stmt)
+
     if receipt:
-        return receipt_schema.dump(receipt)
+        # Calculate the total based on the subtotal of each outgoing stock item
+        total = sum(
+            outgoing_stock.subtotal for outgoing_stock in receipt.outgoing_stocks
+        )
+
+        # Update the receipt's total in the database
+        receipt.total = total
+        db.session.commit()
+
+        # Serialize the receipt and include the outgoing stock subtotals
+        serialized_receipt = receipt_schema.dump(receipt)
+        return serialized_receipt
     else:
         return {"error": f"Receipt with id {id} not found"}, 404
 
@@ -36,8 +49,6 @@ def add_new_receipt():
         payment_method=body_data.get("payment_method"),
         purchase_type=body_data.get("purchase_type"),
         customer_id=body_data.get("customer_id"),
-        # Should be auto-generated *Fix after create outgoing stock_item
-        total=body_data.get("total"),
         date=date.today(),
     )
     # Add that receipt to the session
@@ -46,5 +57,3 @@ def add_new_receipt():
     db.session.commit()
     # Respond to the client
     return receipt_schema.dump(receipt), 201
-
-
