@@ -6,7 +6,9 @@ from models.customer import Customer
 from models.shop import Shop
 from models.supplier import Supplier
 from models.receipt import Receipt
+from models.outgoing_stock import OutgoingStock
 from datetime import date
+
 
 db_commands = Blueprint("db", __name__)
 
@@ -145,6 +147,11 @@ def seed_db():
         ),
     ]
     db.session.add_all(receipts)
+
+    outgoing_stocks = [
+        OutgoingStock(stock_item=stock_items[0], quantity=3, receipt=receipts[-1], subtotal=125)
+    ]
+    db.session.add_all(outgoing_stocks)
     db.session.commit()
 
     print("Tables seeded")

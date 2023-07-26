@@ -17,7 +17,11 @@ class StockItem(db.Model):
     unit_price = db.Column(db.Float, nullable=False)
     markup_pct = db.Column(db.Float, nullable=False)
     minimum_stock = db.Column(db.Integer, nullable=False)
-    sku = db.Column(db.String, nullable=False,  unique=True,)  # Supplier SKU
+    sku = db.Column(
+        db.String,
+        nullable=False,
+        unique=True,
+    )  # Supplier SKU
     special_tax = db.Column(
         db.Float, default=10
     )  # Some products migth have special tax
@@ -29,7 +33,7 @@ class StockItem(db.Model):
     # # Register model relationships
     # incoming_stocks = db.relationship("Incoming_stock", back_populates="stock_item")
     shop = db.relationship("Shop", back_populates="stock_items")
-    # outgoing_stocks = db.relationship("Outgoing_stock", back_populates="stock_item")
+    outgoing_stocks = db.relationship("OutgoingStock", back_populates="stock_item")
 
 
 # Create a stock_item schema usign marshmallow to convert the data
@@ -39,9 +43,9 @@ class StockItemSchema(CamelCasedSchema):
     #     fields.Nested("Incoming_stockSchema", exclude=["stock_item"])
     # )
     shop = fields.Nested("ShopSchema", only=["shop_name", "address"])
-    # outgoing_stocks = fields.List(
-    #     fields.Nested("Outgoing_stockSchema", exclude=["stock_item"])
-    # )
+    outgoing_stocks = fields.List(
+        fields.Nested("OutgoingStockSchema", exclude=["stock_item"])
+    )
 
     class Meta:
         fields = (
@@ -60,7 +64,7 @@ class StockItemSchema(CamelCasedSchema):
             "status",
             "shop_id",
             # "incoming_stocks",
-            # "outgoing_stocks"
+            # "outgoing_stocks",
         )
         ordered = True
 

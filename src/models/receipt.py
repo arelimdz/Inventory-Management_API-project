@@ -21,11 +21,15 @@ class Receipt(db.Model):
 
     # Register model relationships
     customer = db.relationship("Customer", back_populates="receipts")
+    outgoing_stocks = db.relationship("OutgoingStock", back_populates="receipt")
 
 
 # Create a Receipt schema usign marshmallow
 class ReceiptSchema(CamelCasedSchema):
     customer = fields.Nested("CustomerSchema", exclude=["receipts"])
+    outgoing_stocks = fields.List(
+        fields.Nested("OutgoingStockSchema", exclude=["receipt"])
+    )
 
     class Meta:
         fields = (
@@ -35,6 +39,7 @@ class ReceiptSchema(CamelCasedSchema):
             "payment_method",
             "purchase_type",
             "customer_id",
+            "outgoing_stocks",
         )
 
 

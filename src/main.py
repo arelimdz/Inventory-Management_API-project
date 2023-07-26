@@ -8,6 +8,7 @@ from controllers.customer_controller import customers_blueprint
 from controllers.shop_controller import shops_blueprint
 from controllers.supplier_controller import suppliers_blueprint
 from controllers.receipt_controller import receipts_blueprint
+from controllers.outgoing_stock_controller import outgoing_stocks_blueprint
 
 
 def create_app():
@@ -29,4 +30,5 @@ def create_app():
     app.register_blueprint(shops_blueprint)
     app.register_blueprint(suppliers_blueprint)
     app.register_blueprint(receipts_blueprint)
+    app.register_blueprint(outgoing_stocks_blueprint)
     return app
