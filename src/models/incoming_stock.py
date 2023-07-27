@@ -28,8 +28,11 @@ class IncomingStock(db.Model):
 
 # Create a incoming_stock schema usign marshmallow
 class IncomingStockSchema(CamelCasedSchema):
-    supplier = fields.Nested("SupplierSchema", only=["name"])
-    stock_item = fields.Nested("StockItemSchema", exclude=["incoming_stocks"])
+    supplier = fields.Nested("SupplierSchema", only=["name", "id", "email"])
+    stock_item = fields.Nested(
+        "StockItemSchema",
+        only=["id", "item_name", "item_brand", "size", "sku", "unit_price", "quantity"],
+    )
 
     class Meta:
         fields = (
