@@ -11,6 +11,9 @@ class Receipt(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
     total = db.Column(db.Numeric(10, 2), default=0)
+    discount = db.Column(db.Numeric(10, 2), default=0)
+    subtotal = db.Column(db.Numeric(10, 2), default=0)
+    status = db.Column(db.String, nullable=False, default="Active")
 
     # Information from frontend
     payment_method = db.Column(db.String, nullable=False)
@@ -35,11 +38,14 @@ class ReceiptSchema(CamelCasedSchema):
         fields = (
             "id",
             "date",
+            "subtotal",
+            "discount",
             "total",
             "payment_method",
             "purchase_type",
-            "customer_id",
+            "customer",
             "outgoing_stocks",
+            "status"
         )
 
 

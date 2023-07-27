@@ -133,6 +133,8 @@ def seed_db():
     receipts = [
         Receipt(
             date=date.today(),
+            subtotal=100,
+            discount=24,
             total=124.0,
             payment_method="Card",
             purchase_type="Credit",
@@ -140,7 +142,9 @@ def seed_db():
         ),
         Receipt(
             date=date.today(),
-            total=900.5,
+            subtotal=900,
+            discount=100,
+            total=800,
             payment_method="Cash",
             purchase_type="One-off payment",
             customer=customers[0],
@@ -149,7 +153,9 @@ def seed_db():
     db.session.add_all(receipts)
 
     outgoing_stocks = [
-        OutgoingStock(stock_item=stock_items[0], quantity=3, receipt=receipts[-1], subtotal=125)
+        OutgoingStock(
+            stock_item=stock_items[0], quantity=3, receipt=receipts[-1], subtotal=125
+        )
     ]
     db.session.add_all(outgoing_stocks)
     db.session.commit()
