@@ -5,6 +5,10 @@ from models.stock_item import StockItem
 from models.customer import Customer
 from models.shop import Shop
 from models.supplier import Supplier
+from models.receipt import Receipt
+from models.outgoing_stock import OutgoingStock
+from datetime import date
+
 
 db_commands = Blueprint("db", __name__)
 
@@ -126,6 +130,34 @@ def seed_db():
     ]
     db.session.add_all(suppliers)
 
+    receipts = [
+        Receipt(
+            date=date.today(),
+            subtotal=100,
+            discount=24,
+            total=124.0,
+            payment_method="Card",
+            purchase_type="Credit",
+            customer=customers[0],
+        ),
+        Receipt(
+            date=date.today(),
+            subtotal=900,
+            discount=100,
+            total=800,
+            payment_method="Cash",
+            purchase_type="One-off payment",
+            customer=customers[0],
+        ),
+    ]
+    db.session.add_all(receipts)
+
+    outgoing_stocks = [
+        OutgoingStock(
+            stock_item=stock_items[0], quantity=3, receipt=receipts[-1], subtotal=125
+        )
+    ]
+    db.session.add_all(outgoing_stocks)
     db.session.commit()
 
     print("Tables seeded")

@@ -72,7 +72,7 @@ def add_new_item():
             return {"error": f"The {err.orig.diag.column_name} is required"}, 409
 
 
-# Update an item in stock_items table
+# Update information about an item in stock_items table
 @stock_items_blueprint.route("/<int:id>", methods=["PUT", "PATCH"])
 @jwt_required()
 def update_stock_item(id):
@@ -95,7 +95,7 @@ def update_stock_item(id):
         stock_item.size = body_data.get("size") or stock_item.size
         stock_item.sku = body_data.get("sku") or stock_item.sku
         stock_item.category = body_data.get("category") or stock_item.category
-        stock_item.quantity = body_data.get("quantity") or stock_item.quantity
+        # stock_item.quantity = body_data.get("quantity") or stock_item.quantity
         stock_item.unit_price = body_data.get("unit_price") or stock_item.unit_price
         stock_item.markup_pct = body_data.get("markup_pct") or stock_item.markup_pct
         stock_item.minimum_stock = (
