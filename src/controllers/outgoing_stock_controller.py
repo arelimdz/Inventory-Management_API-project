@@ -34,7 +34,7 @@ def get_one_outgoing_stock(id):
         return {"error": f"OutgoingStock with id {id} not found"}, 404
 
 
-# Create a new OutgoingStock and update stock_item quantity
+# This route create a new outgoing_stock event and update stock_items table
 @outgoing_stocks_blueprint.route("/receipts/<id>", methods=["POST"])
 @jwt_required()
 def add_outgoing_stock_event(id):
