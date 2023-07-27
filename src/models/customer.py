@@ -13,7 +13,7 @@ class Customer(db.Model):
     address = db.Column(db.String, nullable=False)
     city = db.Column(db.String, nullable=False)
     phone_number = db.Column(db.String, nullable=False)
-    authorised_discount = db.Column(db.Float, default=0)
+    authorised_discount = db.Column(db.Numeric(5, 2), default=0)
 
     # Register model relationships
     receipts = db.relationship("Receipt", back_populates="customer")

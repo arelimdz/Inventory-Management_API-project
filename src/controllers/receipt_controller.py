@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from init import db
 from flask_jwt_extended import jwt_required
 from models.receipt import Receipt, receipt_schema, receipts_schema
+from models.customer import Customer
 
 # from controllers.auth_controller import authorise_as_admin
 from datetime import date
@@ -38,30 +39,32 @@ def get_all_receipts():
 #         return {"error": f"Receipt with id {id} not found"}, 404
 
 
-# @receipts_blueprint.route("/<int:id>", methods=["GET"])
-# def get_one_receipts(id):
-#     stmt = db.select(Receipt).filter_by(id=id)
-#     receipt = db.session.scalar(stmt)
+@receipts_blueprint.route("/<int:id>", methods=["GET"])
+def get_one_receipts(id):
+    stmt = db.select(Receipt).filter_by(id=id)
+    receipt = db.session.scalar(stmt)
 
-#     if receipt:
-#         # Calculate the product total based on the subtotal of each outgoing stock item
-#         items_total = sum(
-#             outgoing_stock.subtotal for outgoing_stock in receipt.outgoing_stocks
-#         )
+    if receipt:
+        # Calculate the product total based on the subtotal of each outgoing stock item
+        items_total = sum(
+            outgoing_stock.subtotal for outgoing_stock in receipt.outgoing_stocks
+        )
 
-#         # Calculate customer's discount
+        # Calculate customer's discount
+        customer = Customer.query.get(receipt.customer_id)
+        discount = customer.authorised_discount
 
-#         total = items_total
+        total = items_total + discount
 
-#         # Update the receipt's total in the database
-#         receipt.total = total
-#         db.session.commit()
+        # Update the receipt's total in the database
+        receipt.total = total
+        db.session.commit()
 
-#         # Serialize the receipt and include the outgoing stock subtotals
-#         serialized_receipt = receipt_schema.dump(receipt)
-#         return serialized_receipt
-#     else:
-#         return {"error": f"Receipt with id {id} not found"}, 404
+        # Serialize the receipt and include the outgoing stock subtotals
+        serialized_receipt = receipt_schema.dump(receipt)
+        return serialized_receipt
+    else:
+        return {"error": f"Receipt with id {id} not found"}, 404
 
 
 @receipts_blueprint.route("/", methods=["POST"])
