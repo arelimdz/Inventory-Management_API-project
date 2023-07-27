@@ -10,7 +10,7 @@ class Receipt(db.Model):
     # Auto-generated
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
-    total = db.Column(db.Float, default=0)
+    total = db.Column(db.Numeric(10, 2), default=0)
 
     # Information from frontend
     payment_method = db.Column(db.String, nullable=False)

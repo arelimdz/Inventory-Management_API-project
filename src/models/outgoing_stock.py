@@ -9,7 +9,7 @@ class OutgoingStock(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
-    subtotal = db.Column(db.Float)
+    subtotal = db.Column(db.Numeric(10, 2))
 
     # Register Foreign Key
     stock_item_id = db.Column(db.Integer, db.ForeignKey("stock_items.id"))
@@ -29,6 +29,7 @@ class OutgoingStockSchema(CamelCasedSchema):
             "minimum_stock",
             # "incoming_stock",
             "outgoing_stock",
+            "id"
         ],
     )
     receipt = fields.Nested(
@@ -36,7 +37,7 @@ class OutgoingStockSchema(CamelCasedSchema):
     )
 
     class Meta:
-        fields = ("id", "quantity", "stock_item", "receipt", "subtotal")
+        fields = ("id", "quantity", "stock_item_id", "stock_item", "receipt", "subtotal")
 
 
 # Declare outgoing_stock schema to be able to retrieve information to the frontend

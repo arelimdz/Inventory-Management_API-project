@@ -14,8 +14,8 @@ class StockItem(db.Model):
     size = db.Column(db.String, nullable=False)
     category = db.Column(db.String, nullable=False)
     quantity = db.Column(db.Integer, default=0)
-    unit_price = db.Column(db.Float, nullable=False)
-    markup_pct = db.Column(db.Float, nullable=False)
+    unit_price = db.Column(db.Numeric(10, 2), nullable=False)
+    markup_pct = db.Column(db.Numeric(5, 2), nullable=False)
     minimum_stock = db.Column(db.Integer, nullable=False)
     sku = db.Column(
         db.String,
@@ -23,7 +23,7 @@ class StockItem(db.Model):
         unique=True,
     )  # Supplier SKU
     special_tax = db.Column(
-        db.Float, default=10
+        db.Numeric(5, 2), default=10
     )  # Some products migth have special tax
     status = db.Column(db.String, default="Active")
 

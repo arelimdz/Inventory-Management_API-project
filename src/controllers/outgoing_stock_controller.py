@@ -35,7 +35,6 @@ def get_one_outgoing_stock(id):
         return {"error": f"OutgoingStock with id {id} not found"}, 404
 
 
-
 @outgoing_stocks_blueprint.route("/item/<item_id>", methods=["GET"])
 def get_item_price(item_id):
     stmt = db.select(StockItem).filter_by(id=item_id)
@@ -43,7 +42,6 @@ def get_item_price(item_id):
     price = item.unit_price
     quantity_in_stock = item.quantity
     return {"price": price, "quantity_in_stock": quantity_in_stock}
-
 
 
 # Create a new OutgoingStock event
@@ -59,12 +57,15 @@ def add_outgoing_stock_event(id):
 
         # Check if item_id exists and if there are enough items to sell
         if item_id:
-            item_exists = db.session.query(exists().where(StockItem.id == item_id)).scalar()
+            item_exists = db.session.query(
+                exists().where(StockItem.id == item_id)
+            ).scalar()
             if item_exists:
                 item = StockItem.query.get(item_id)
                 quantity_wanted = body_data.get("quantity")
                 quantity_in_stock = item.quantity
                 price = item.unit_price
+                tax = item.special_tax / 100
 
                 if quantity_in_stock >= quantity_wanted:
                     # Create a new OutgoingStock model instance using frontend data
@@ -72,7 +73,8 @@ def add_outgoing_stock_event(id):
                         quantity=body_data.get("quantity"),
                         stock_item_id=item_id,
                         receipt_id=id,
-                        subtotal=price * quantity_wanted,
+                        subtotal=(price * quantity_wanted)
+                        + ((tax * price) * quantity_wanted),
                     )
                     # Add that outgoing_stock to the session
                     db.session.add(outgoing_stock)
@@ -82,7 +84,9 @@ def add_outgoing_stock_event(id):
                     # Respond to the client
                     return outgoing_stock_schema.dump(outgoing_stock), 201
                 else:
-                    return {"error": f"Insufficient stock, {quantity_in_stock} pieces left"}, 400
+                    return {
+                        "error": f"Insufficient stock, {quantity_in_stock} pieces left"
+                    }, 400
             else:
                 return {"error": f"Item with id {item_id} not found"}, 404
         else:
