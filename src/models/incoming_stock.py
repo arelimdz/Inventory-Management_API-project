@@ -30,8 +30,7 @@ class IncomingStock(db.Model):
 class IncomingStockSchema(CamelCasedSchema):
     supplier = fields.Nested("SupplierSchema", only=["name", "id", "email"])
     stock_item = fields.Nested(
-        "StockItemSchema",
-        only=["id", "item_name", "item_brand", "size", "sku", "unit_price", "quantity"],
+        "StockItemSchema", only=["id", "item_name", "item_brand", "size", "sku", "unit_price", "quantity"]
     )
 
     class Meta:
@@ -41,8 +40,8 @@ class IncomingStockSchema(CamelCasedSchema):
             "quantity",
             "item_cost",
             "invoice_number",
-            "supplier",
-            "stock_item",
+            "supplier_id",
+            "stock_item_id",
         )
 
 

@@ -59,14 +59,14 @@ def add_new_item():
             )
             # Add the stock item to the session
             db.session.add(stock_item)
-            # Commit the transaction to the database
+            # Commit chnages to the database
             db.session.commit()
             # Respond to the client with the newly created stock item
             return stock_item_schema.dump(stock_item), 201
 
     except IntegrityError as err:
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
-            return {"error": "SKU already exist"}, 409
+            return {"error": "Item with same SKU already exist"}, 409
 
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             return {"error": f"The {err.orig.diag.column_name} is required"}, 409
