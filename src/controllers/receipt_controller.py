@@ -84,7 +84,7 @@ def cancel_receipt(id):
 
     # Check if receipt exist in the database
     if receipt:
-        # Update supplier information in the database with data receive from frontend
+        # Update receipt status to "cancel"
         receipt.status = body_data.get("status")
         # Add that receipt to the session
         db.session.add(receipt)

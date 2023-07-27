@@ -50,7 +50,9 @@ def get_item_price(item_id):
 def add_outgoing_stock_event(id):
     # Check if receipt exists in receipts db
     receipt_exists = db.session.query(exists().where(Receipt.id == id)).scalar()
-    if receipt_exists:
+    receipt = Receipt.query.get(id)
+
+    if receipt_exists and receipt.status == "Active":
         # Access frontend data
         body_data = outgoing_stock_schema.load(request.get_json())
         item_id = body_data.get("stock_item_id")
@@ -98,4 +100,4 @@ def add_outgoing_stock_event(id):
         else:
             return {"error": "Item id and quantity required"}, 409
     else:
-        return {"error": f"Receipt with id {id} not found"}, 404
+        return {"error": f"Receipt with id {id} not found or has been cancelled"}, 404
