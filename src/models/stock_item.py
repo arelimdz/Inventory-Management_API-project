@@ -31,17 +31,16 @@ class StockItem(db.Model):
     shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"), nullable=False)
 
     # # Register model relationships
-    # incoming_stocks = db.relationship("Incoming_stock", back_populates="stock_item")
+    incoming_stocks = db.relationship("IncomingStock", back_populates="stock_item")
     shop = db.relationship("Shop", back_populates="stock_items")
     outgoing_stocks = db.relationship("OutgoingStock", back_populates="stock_item")
 
 
-# Create a stock_item schema usign marshmallow to convert the data
-# from the database in a Serializing Json type object
+# Create a stock_item schema usign marshmallow
 class StockItemSchema(CamelCasedSchema):
-    # incoming_stocks = fields.List(
-    #     fields.Nested("Incoming_stockSchema", exclude=["stock_item"])
-    # )
+    incoming_stocks = fields.List(
+        fields.Nested("IncomingStockSchema", exclude=["stock_item"])
+    )
     shop = fields.Nested("ShopSchema", only=["shop_name", "address"])
     outgoing_stocks = fields.List(
         fields.Nested("OutgoingStockSchema", exclude=["stock_item"])
@@ -63,7 +62,7 @@ class StockItemSchema(CamelCasedSchema):
             "special_tax",
             "status",
             "shop_id",
-            # "incoming_stocks",
+            # "incoming_stock",
             "outgoing_stock",
         )
 

@@ -27,9 +27,9 @@ class OutgoingStockSchema(CamelCasedSchema):
         exclude=[
             "markup_pct",
             "minimum_stock",
-            # "incoming_stock",
+            "incoming_stock",
             "outgoing_stock",
-            "id"
+            "id",
         ],
     )
     receipt = fields.Nested(
@@ -37,7 +37,14 @@ class OutgoingStockSchema(CamelCasedSchema):
     )
 
     class Meta:
-        fields = ("id", "quantity", "stock_item_id", "stock_item", "receipt", "subtotal")
+        fields = (
+            "id",
+            "quantity",
+            "stock_item_id",
+            "stock_item",
+            "receipt",
+            "subtotal",
+        )
 
 
 # Declare outgoing_stock schema to be able to retrieve information to the frontend

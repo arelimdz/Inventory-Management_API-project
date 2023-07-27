@@ -7,6 +7,7 @@ from models.shop import Shop
 from models.supplier import Supplier
 from models.receipt import Receipt
 from models.outgoing_stock import OutgoingStock
+from models.incoming_stock import IncomingStock
 from datetime import date
 
 
@@ -66,30 +67,82 @@ def seed_db():
     stock_items = [
         StockItem(
             item_name="Wash&Wear White",
-            item_description="Low Sheen water-base paint for interior walls",
+            item_description="Low Sheen, water-base, for interior walls",
             item_brand="Dulux",
             size="1L",
-            category="Water-based paint",
-            quantity=24,
-            unit_price=39.90,
-            markup_pct=15.0,
+            category="Water-based",
+            quantity=100,
+            unit_price=20.5,
+            markup_pct=15,
             minimum_stock=50,
             sku="DWBWW100WH",
             shop=shops[0],
         ),
         StockItem(
-            item_name="Super Enamel White",
-            item_description="Semi Gloss is a high quality and hard-wearing oil-based interior enamel",
+            item_name="Wash&Wear Beige",
+            item_description="Low Sheen, water-base, for interior walls",
             item_brand="Dulux",
             size="4L",
-            category="Oil-based paint",
-            quantity=12,
-            unit_price=89.90,
-            markup_pct=10.0,
+            category="Water-based",
+            quantity=50,
+            unit_price=70,
+            markup_pct=15,
+            minimum_stock=20,
+            sku="DWBWW400BG",
+            shop=shops[0],
+        ),
+        StockItem(
+            item_name="UltraColor Green",
+            item_description="Low Sheen, water-base, for exterior walls",
+            item_brand="Dulux",
+            size="19L",
+            category="Water-based",
+            quantity=10,
+            unit_price=200,
+            markup_pct=15,
+            minimum_stock=10,
+            sku="DWBUC1900GR",
+            shop=shops[0],
+        ),
+        StockItem(
+            item_name="Super-Enamel White",
+            item_description="Semi Gloss, oil-based interior enamel",
+            item_brand="Dulux",
+            size="4L",
+            category="Oil-based",
+            quantity=50,
+            unit_price=80.00,
+            markup_pct=10,
             minimum_stock=24,
             sku="DOBSE400WH",
             special_tax=15,
             status="Discontinued",
+            shop=shops[1],
+        ),
+        StockItem(
+            item_name="Acrilac Black",
+            item_description="Super Gloss acrilic paint",
+            item_brand="Sherwin-Williams",
+            size="0.250L",
+            category="Acrilic",
+            quantity=100,
+            unit_price=10.00,
+            markup_pct=10,
+            minimum_stock=25,
+            sku="SWABAC250BL",
+            shop=shops[1],
+        ),
+        StockItem(
+            item_name="Super-Car Red",
+            item_description="Super Gloss car paint",
+            item_brand="Sherwin-Williams",
+            size="4L",
+            category="Polyurethane",
+            quantity=20,
+            unit_price=1500.00,
+            markup_pct=20,
+            minimum_stock=25,
+            sku="SWPBSC400RE",
             shop=shops[1],
         ),
     ]
@@ -142,9 +195,9 @@ def seed_db():
         ),
         Receipt(
             date=date.today(),
-            subtotal=900,
-            discount=100,
-            total=800,
+            subtotal=23.57,
+            discount=0,
+            total=23.57,
             payment_method="Cash",
             purchase_type="One-off payment",
             customer=customers[0],
@@ -154,10 +207,23 @@ def seed_db():
 
     outgoing_stocks = [
         OutgoingStock(
-            stock_item=stock_items[0], quantity=3, receipt=receipts[-1], subtotal=125
+            stock_item=stock_items[0], quantity=1, receipt=receipts[1], subtotal=23.57
         )
     ]
     db.session.add_all(outgoing_stocks)
+
+    incoming_stocks = [
+        IncomingStock(
+            date=date.today(),
+            quantity=10,
+            item_cost=17.42,
+            stock_item=stock_items[0],
+            invoice_number="D-000",
+            supplier=suppliers[0],
+        )
+    ]
+    db.session.add_all(incoming_stocks)
+
     db.session.commit()
 
     print("Tables seeded")
