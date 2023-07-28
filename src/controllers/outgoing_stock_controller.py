@@ -78,7 +78,7 @@ def add_outgoing_stock_event(id):
                         )
 
                         # Update the stock_items's quantity in the database
-                        item.quantity = item.quantity - quantity_wanted
+                        item.quantity -= quantity_wanted
 
                         # Add that outgoing_stock to the session
                         db.session.add(outgoing_stock)
@@ -124,11 +124,15 @@ def delete_one_card(id):
         item = db.session.scalar(stmt)
 
         # Update the stock_items's quantity in the database
-        item.quantity = item.quantity + add_quantity_back
+        item.quantity += add_quantity_back
 
         # Delete outgoing stock event
         db.session.delete(outgoing_stock)
+        
+        # Commit changes to the database
         db.session.commit()
+        
+        # Respond to the client with a success message
         return {
             "message": f"Outgoing_stock event {outgoing_stock.id} deleted successfully"
         }

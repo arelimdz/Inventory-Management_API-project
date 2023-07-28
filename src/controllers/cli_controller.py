@@ -214,12 +214,11 @@ def seed_db():
 
     incoming_stocks = [
         IncomingStock(
-            date=date.today(),
             quantity=10,
             item_cost=17.42,
-            stock_item=stock_items[0],
+            stock_item=stock_items[1],
             invoice_number="D-000",
-            supplier=suppliers[0],
+            supplier=suppliers[1],
         )
     ]
     db.session.add_all(incoming_stocks)

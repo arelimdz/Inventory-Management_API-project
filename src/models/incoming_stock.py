@@ -1,6 +1,8 @@
 from init import db
 from marshmallow import fields
+from datetime import date
 from .CamelCasedSchema import CamelCasedSchema
+from sqlalchemy import UniqueConstraint
 
 
 # Declare incoming_stock model and its attributes
@@ -8,7 +10,7 @@ class IncomingStock(db.Model):
     __tablename__ = "incoming_stocks"
 
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date)
+    date = db.Column(db.Date, nullable=False, default=date.today())
     quantity = db.Column(db.Integer, nullable=False)
     item_cost = db.Column(db.Numeric(10, 2), nullable=False)
     invoice_number = db.Column(db.String, nullable=False)
@@ -21,16 +23,26 @@ class IncomingStock(db.Model):
 
     # Register model relationships
     supplier = db.relationship("Supplier", back_populates="incoming_stock")
-    stock_item = db.relationship(
-        "StockItem", back_populates="incoming_stocks", cascade="all, delete"
-    )
+    stock_item = db.relationship("StockItem", back_populates="incoming_stocks")
+
+    # Create a unique constraint on stock_item_id and invoice_number
+    __table_args__ = (UniqueConstraint("stock_item_id", "invoice_number"),)
 
 
 # Create a incoming_stock schema usign marshmallow
 class IncomingStockSchema(CamelCasedSchema):
     supplier = fields.Nested("SupplierSchema", only=["name", "id", "email"])
     stock_item = fields.Nested(
-        "StockItemSchema", only=["id", "item_name", "item_brand", "size", "sku", "unit_price", "quantity"]
+        "StockItemSchema",
+        only=[
+            "id",
+            "item_name",
+            "item_brand",
+            "size",
+            "sku",
+            "unit_price",
+            "quantity",
+        ],
     )
 
     class Meta:

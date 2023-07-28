@@ -36,38 +36,78 @@ def get_one_incoming_stock(id):
         return {"error": f"Incoming Stock with id {id} not found"}, 404
 
 
+# This route create a new incoming_stock event that update stock_items tables (quantity)
 @incoming_stocks_blueprint.route("/", methods=["POST"])
 def add_new_incoming_stock():
     try:
         # Access to the information from the frontend
         body_data = incoming_stock_schema.load(request.get_json())
         item_id = body_data.get("stock_item_id")
-        # Check if stock_item exist in db
-        stmt = db.select(StockItem).filter_by(id=item_id)
-        stock_item = db.session.scalar(stmt)
+        invoice = body_data.get("invoice_number")
+        # Check if stock_item exists in the database
+        stock_item = StockItem.query.get(item_id)
 
         if stock_item:
             # Create a new IncomingStock model instance
             incoming_stock = IncomingStock(
-                date=date.today(),
                 quantity=body_data.get("quantity"),
                 item_cost=body_data.get("item_cost"),
-                invoice_number=body_data.get("invoice_number"),
+                invoice_number=invoice,
                 supplier_id=body_data.get("supplier_id"),
-                stock_item_id=body_data.get("stock_item_id"),
+                stock_item_id=item_id,
             )
             # Add the incoming_stock to the session
             db.session.add(incoming_stock)
             # Update quantity in stock_item database
-            stock_item.quantity = stock_item.quantity + body_data.get("quantity")
+            stock_item.quantity += body_data.get("quantity")
             # Commit changes to the database
             db.session.commit()
             # Respond to the client with the newly created stock item
             return incoming_stock_schema.dump(incoming_stock), 201
         else:
             return {
-                "error": f"Item with id {item_id} not found, You need to register new item"
+                "error": f"Item with id {item_id} not found, You need to register a new item"
             }
     except IntegrityError as err:
-        if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
-            return {"error": f"The {err.orig.diag.column_name} is required"}, 409
+        # Check if incoming_stock event is not duplicate
+        if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
+            return {
+                "error": f"Item with id {item_id} has been registered with invoice number {invoice}"
+            }, 409
+        elif err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
+            return {"error": f"The {err.orig.diag.column_name} is required"}, 400
+
+
+# This route delete an incoming_stock event given the id and update stock_items tables (quantity)
+@incoming_stocks_blueprint.route("/<int:id>", methods=["DELETE"])
+def delete_incoming_stock(id):
+    # Check if incoming stock exists in the database
+
+    id_exists = db.session.query(exists().where(IncomingStock.id == id)).scalar()
+
+    if id_exists:
+        # Access to outgoing_stock database
+        incoming_stock = IncomingStock.query.get(id)
+        item_id = incoming_stock.stock_item_id
+        remove_from_stock = incoming_stock.quantity
+        
+        # Access to stock_items database
+        stmt = db.select(StockItem).filter_by(id=item_id)
+        item = db.session.scalar(stmt)
+
+        # Update the stock_items's quantity in the database
+        item.quantity -= remove_from_stock
+
+        # Delete outgoing stock event
+        db.session.delete(incoming_stock)
+
+        # Commit changes to the database
+        db.session.commit()
+
+        # Respond to the client with a success message
+        return {
+            "message": f"Incoming stock with id {id} has been deleted successfully"
+        }, 200
+    else:
+        return {"error": f"Incoming stock with id {id} not found"}, 404
+
