@@ -45,7 +45,7 @@ class ReceiptSchema(CamelCasedSchema):
             "purchase_type",
             "customer",
             "outgoing_stocks",
-            "status"
+            "status",
         )
 
 

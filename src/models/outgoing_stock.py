@@ -10,6 +10,8 @@ class OutgoingStock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     subtotal = db.Column(db.Numeric(10, 2))
+    tax = db.Column(db.Numeric(10, 2))
+    total = db.Column(db.Numeric(10, 2))
 
     # Register Foreign Key
     stock_item_id = db.Column(db.Integer, db.ForeignKey("stock_items.id"))
@@ -43,7 +45,9 @@ class OutgoingStockSchema(CamelCasedSchema):
             "stock_item_id",
             "stock_item",
             "receipt",
+            "tax",
             "subtotal",
+            "total",
         )
 
 

@@ -26,7 +26,7 @@ def get_one_receipts(id):
     if receipt:
         # Calculate receipt subtotal base in all products in receipt
         subtotal = sum(
-            outgoing_stock.subtotal for outgoing_stock in receipt.outgoing_stocks
+            outgoing_stock.total for outgoing_stock in receipt.outgoing_stocks
         )
 
         # Calculate customer's discount

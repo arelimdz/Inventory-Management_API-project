@@ -9,7 +9,7 @@ from controllers.shop_controller import shops_blueprint
 from controllers.supplier_controller import suppliers_blueprint
 from controllers.receipt_controller import receipts_blueprint
 from controllers.outgoing_stock_controller import outgoing_stocks_blueprint
-from controllers.incoming_stock import incoming_stocks_blueprint
+from controllers.incoming_stock_controller import incoming_stocks_blueprint
 
 
 def create_app():

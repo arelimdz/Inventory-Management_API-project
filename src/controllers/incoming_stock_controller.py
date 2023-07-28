@@ -1,6 +1,5 @@
 from flask import Blueprint, request
 from init import db
-from datetime import date
 from sqlalchemy import exists
 from flask_jwt_extended import jwt_required
 from models.stock_item import StockItem
@@ -20,6 +19,7 @@ incoming_stocks_blueprint = Blueprint(
 
 
 @incoming_stocks_blueprint.route("/", methods=["GET"])
+@jwt_required()
 def get_all_incoming_stocks():
     stmt = db.select(IncomingStock).order_by(IncomingStock.id)
     incoming_stock = db.session.scalars(stmt)
@@ -27,6 +27,7 @@ def get_all_incoming_stocks():
 
 
 @incoming_stocks_blueprint.route("/<int:id>", methods=["GET"])
+@jwt_required()
 def get_one_incoming_stock(id):
     stmt = db.select(IncomingStock).filter_by(id=id)
     incoming_stock = db.session.scalar(stmt)
@@ -38,7 +39,13 @@ def get_one_incoming_stock(id):
 
 # This route create a new incoming_stock event that update stock_items tables (quantity)
 @incoming_stocks_blueprint.route("/", methods=["POST"])
+@jwt_required()
 def add_new_incoming_stock():
+    # Check if user is admin
+    is_admin = authorise_as_admin()
+    if not is_admin:
+        return {"error": "Only Shop Manager can create incoming_stock events"}, 403
+
     try:
         # Access to the information from the frontend
         body_data = incoming_stock_schema.load(request.get_json())
@@ -48,11 +55,10 @@ def add_new_incoming_stock():
 
         # Check if stock_item exists in the database
         stock_item = StockItem.query.get(item_id)
-        item_current_cost = stock_item.unit_price
 
         if stock_item:
             # Check if there is any price change
-            if new_cost == item_current_cost:
+            if new_cost == stock_item.unit_cost:
                 # Create a new IncomingStock model instance
                 incoming_stock = IncomingStock(
                     quantity=body_data.get("quantity"),
@@ -89,9 +95,14 @@ def add_new_incoming_stock():
 
 # This route delete an incoming_stock event given the id and update stock_items tables (quantity)
 @incoming_stocks_blueprint.route("/<int:id>", methods=["DELETE"])
+@jwt_required()
 def delete_incoming_stock(id):
-    # Check if incoming stock exists in the database
+    # Check if user is admin
+    is_admin = authorise_as_admin()
+    if not is_admin:
+        return {"error": "Only Shop Manager can delete incoming_stock events"}, 403
 
+    # Check if incoming stock exists in the database
     id_exists = db.session.query(exists().where(IncomingStock.id == id)).scalar()
 
     if id_exists:

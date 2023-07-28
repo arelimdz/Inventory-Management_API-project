@@ -57,6 +57,7 @@ class StockItemSchema(CamelCasedSchema):
             "sku",
             "category",
             "quantity",
+            "unit_cost",
             "unit_price",
             "markup_pct",
             "minimum_stock",
