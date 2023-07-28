@@ -44,26 +44,35 @@ def add_new_incoming_stock():
         body_data = incoming_stock_schema.load(request.get_json())
         item_id = body_data.get("stock_item_id")
         invoice = body_data.get("invoice_number")
+        new_cost = body_data.get("item_cost")
+
         # Check if stock_item exists in the database
         stock_item = StockItem.query.get(item_id)
+        item_current_cost = stock_item.unit_price
 
         if stock_item:
-            # Create a new IncomingStock model instance
-            incoming_stock = IncomingStock(
-                quantity=body_data.get("quantity"),
-                item_cost=body_data.get("item_cost"),
-                invoice_number=invoice,
-                supplier_id=body_data.get("supplier_id"),
-                stock_item_id=item_id,
-            )
-            # Add the incoming_stock to the session
-            db.session.add(incoming_stock)
-            # Update quantity in stock_item database
-            stock_item.quantity += body_data.get("quantity")
-            # Commit changes to the database
-            db.session.commit()
-            # Respond to the client with the newly created stock item
-            return incoming_stock_schema.dump(incoming_stock), 201
+            # Check if there is any price change
+            if new_cost == item_current_cost:
+                # Create a new IncomingStock model instance
+                incoming_stock = IncomingStock(
+                    quantity=body_data.get("quantity"),
+                    item_cost=body_data.get("item_cost"),
+                    invoice_number=invoice,
+                    supplier_id=body_data.get("supplier_id"),
+                    stock_item_id=item_id,
+                )
+                # Add the incoming_stock to the session
+                db.session.add(incoming_stock)
+                # Update quantity in stock_item database
+                stock_item.quantity += body_data.get("quantity")
+                # Commit changes to the database
+                db.session.commit()
+                # Respond to the client with the newly created stock item
+                return incoming_stock_schema.dump(incoming_stock), 201
+            else:
+                return {
+                    "message": f"There is a cost change on item with id {item_id}, you need to update item unit_cost"
+                }
         else:
             return {
                 "error": f"Item with id {item_id} not found, You need to register a new item"
@@ -90,7 +99,7 @@ def delete_incoming_stock(id):
         incoming_stock = IncomingStock.query.get(id)
         item_id = incoming_stock.stock_item_id
         remove_from_stock = incoming_stock.quantity
-        
+
         # Access to stock_items database
         stmt = db.select(StockItem).filter_by(id=item_id)
         item = db.session.scalar(stmt)
@@ -110,4 +119,3 @@ def delete_incoming_stock(id):
         }, 200
     else:
         return {"error": f"Incoming stock with id {id} not found"}, 404
-

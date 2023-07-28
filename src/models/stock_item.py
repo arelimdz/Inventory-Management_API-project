@@ -14,6 +14,7 @@ class StockItem(db.Model):
     size = db.Column(db.String, nullable=False)
     category = db.Column(db.String, nullable=False)
     quantity = db.Column(db.Integer, default=0)
+    unit_cost = db.Column(db.Numeric(100, 2), nullable=False)
     unit_price = db.Column(db.Numeric(100, 2), nullable=False)
     markup_pct = db.Column(db.Numeric(5, 2), nullable=False)
     minimum_stock = db.Column(db.Integer, nullable=False)
