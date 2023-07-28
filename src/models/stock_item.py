@@ -14,6 +14,7 @@ class StockItem(db.Model):
     size = db.Column(db.String, nullable=False)
     category = db.Column(db.String, nullable=False)
     quantity = db.Column(db.Integer, default=0)
+    unit_cost = db.Column(db.Numeric(100, 2), nullable=False)
     unit_price = db.Column(db.Numeric(100, 2), nullable=False)
     markup_pct = db.Column(db.Numeric(5, 2), nullable=False)
     minimum_stock = db.Column(db.Integer, nullable=False)
@@ -31,17 +32,16 @@ class StockItem(db.Model):
     shop_id = db.Column(db.Integer, db.ForeignKey("shops.id"), nullable=False)
 
     # # Register model relationships
-    # incoming_stocks = db.relationship("Incoming_stock", back_populates="stock_item")
+    incoming_stocks = db.relationship("IncomingStock", back_populates="stock_item")
     shop = db.relationship("Shop", back_populates="stock_items")
     outgoing_stocks = db.relationship("OutgoingStock", back_populates="stock_item")
 
 
-# Create a stock_item schema usign marshmallow to convert the data
-# from the database in a Serializing Json type object
+# Create a stock_item schema usign marshmallow
 class StockItemSchema(CamelCasedSchema):
-    # incoming_stocks = fields.List(
-    #     fields.Nested("Incoming_stockSchema", exclude=["stock_item"])
-    # )
+    incoming_stocks = fields.List(
+        fields.Nested("IncomingStockSchema", exclude=["stock_item"])
+    )
     shop = fields.Nested("ShopSchema", only=["shop_name", "address"])
     outgoing_stocks = fields.List(
         fields.Nested("OutgoingStockSchema", exclude=["stock_item"])
@@ -57,13 +57,14 @@ class StockItemSchema(CamelCasedSchema):
             "sku",
             "category",
             "quantity",
+            "unit_cost",
             "unit_price",
             "markup_pct",
             "minimum_stock",
             "special_tax",
             "status",
             "shop_id",
-            # "incoming_stocks",
+            "incoming_stocks",
             "outgoing_stock",
         )
 

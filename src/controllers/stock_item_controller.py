@@ -36,6 +36,9 @@ def add_new_item():
     try:
         # Access to the information from the frontend
         body_data = stock_item_schema.load(request.get_json())
+        item_cost = body_data.get("unit_cost")
+        item_markup = body_data.get("markup_pct")
+        
         # Check if item with sku same as user new item sku already exist in db
         stmt = db.select(StockItem).filter_by(sku="sku")
         stock_item = db.session.scalar(stmt)
@@ -49,8 +52,9 @@ def add_new_item():
                 size=body_data.get("size"),
                 category=body_data.get("category"),
                 quantity=body_data.get("quantity"),
-                unit_price=body_data.get("unit_price"),
-                markup_pct=body_data.get("markup_pct"),
+                unit_cost=item_cost,
+                markup_pct=item_markup,
+                unit_price=item_cost*(1 + (item_markup/100)),
                 minimum_stock=body_data.get("minimum_stock"),
                 sku=body_data.get("sku"),
                 special_tax=body_data.get("special_tax"),
@@ -59,14 +63,14 @@ def add_new_item():
             )
             # Add the stock item to the session
             db.session.add(stock_item)
-            # Commit the transaction to the database
+            # Commit chnages to the database
             db.session.commit()
             # Respond to the client with the newly created stock item
             return stock_item_schema.dump(stock_item), 201
 
     except IntegrityError as err:
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
-            return {"error": "SKU already exist"}, 409
+            return {"error": "Item with same SKU already exist"}, 409
 
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             return {"error": f"The {err.orig.diag.column_name} is required"}, 409

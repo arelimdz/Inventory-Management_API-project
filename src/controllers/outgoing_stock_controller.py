@@ -18,6 +18,7 @@ outgoing_stocks_blueprint = Blueprint(
 
 
 @outgoing_stocks_blueprint.route("/", methods=["GET"])
+@jwt_required()
 def get_all_outgoing_stock():
     stmt = db.select(OutgoingStock).order_by(OutgoingStock.id)
     outgoing_stock = db.session.scalars(stmt)
@@ -25,6 +26,7 @@ def get_all_outgoing_stock():
 
 
 @outgoing_stocks_blueprint.route("/<int:id>", methods=["GET"])
+@jwt_required()
 def get_one_outgoing_stock(id):
     stmt = db.select(OutgoingStock).filter_by(id=id)
     outgoing_stock = db.session.scalar(stmt)
@@ -61,8 +63,9 @@ def add_outgoing_stock_event(id):
                 # item = StockItem.query.get(item_id)
                 quantity_in_stock = item.quantity
                 price = item.unit_price
-                tax = item.special_tax / 100
+                total_tax = price * (item.special_tax / 100)
                 item_status = item.status
+                item_subtotal = price * quantity_wanted
 
                 # Check if the item is currently active (not discontinued item)
                 if item_status == "Active":
@@ -73,12 +76,13 @@ def add_outgoing_stock_event(id):
                             quantity=body_data.get("quantity"),
                             stock_item_id=item_id,
                             receipt_id=id,
-                            subtotal=(price * quantity_wanted)
-                            + ((tax * price) * quantity_wanted),
+                            subtotal=item_subtotal,
+                            tax=total_tax,
+                            total=item_subtotal + total_tax,
                         )
 
                         # Update the stock_items's quantity in the database
-                        item.quantity = item.quantity - quantity_wanted
+                        item.quantity -= quantity_wanted
 
                         # Add that outgoing_stock to the session
                         db.session.add(outgoing_stock)
@@ -124,11 +128,15 @@ def delete_one_card(id):
         item = db.session.scalar(stmt)
 
         # Update the stock_items's quantity in the database
-        item.quantity = item.quantity + add_quantity_back
+        item.quantity += add_quantity_back
 
         # Delete outgoing stock event
         db.session.delete(outgoing_stock)
+
+        # Commit changes to the database
         db.session.commit()
+
+        # Respond to the client with a success message
         return {
             "message": f"Outgoing_stock event {outgoing_stock.id} deleted successfully"
         }
