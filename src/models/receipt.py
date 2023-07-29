@@ -1,6 +1,7 @@
 from init import db
 from .CamelCasedSchema import CamelCasedSchema
 from marshmallow import fields
+from datetime import date
 
 
 # Declare Receipt model and its attributes
@@ -9,7 +10,7 @@ class Receipt(db.Model):
 
     # Auto-generated
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date)
+    date = db.Column(db.Date, default=date.today())
     total = db.Column(db.Numeric(10, 2), default=0)
     discount = db.Column(db.Numeric(10, 2), default=0)
     subtotal = db.Column(db.Numeric(10, 2), default=0)

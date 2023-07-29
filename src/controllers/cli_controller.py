@@ -8,7 +8,6 @@ from models.supplier import Supplier
 from models.receipt import Receipt
 from models.outgoing_stock import OutgoingStock
 from models.incoming_stock import IncomingStock
-from datetime import date
 
 
 db_commands = Blueprint("db", __name__)
@@ -191,7 +190,7 @@ def seed_db():
 
     receipts = [
         Receipt(
-            date=date.today(),
+            # date=date.today(),
             subtotal=100,
             discount=24,
             total=76.0,
@@ -200,7 +199,7 @@ def seed_db():
             customer=customers[0],
         ),
         Receipt(
-            date=date.today(),
+            # date=date.today(),
             subtotal=23.57,
             discount=0,
             total=23.57,
