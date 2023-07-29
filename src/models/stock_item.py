@@ -64,7 +64,7 @@ class StockItemSchema(CamelCasedSchema):
             "special_tax",
             "status",
             "shop_id",
-            "incoming_stocks",
+            "incoming_stock",
             "outgoing_stock",
         )
 

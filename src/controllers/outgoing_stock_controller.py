@@ -44,7 +44,7 @@ def add_outgoing_stock_event(id):
     receipt_exists = db.session.query(exists().where(Receipt.id == id)).scalar()
     receipt = Receipt.query.get(id)
 
-    if receipt_exists and receipt.status == "Active":
+    if receipt_exists and receipt.is_active:
         # Access frontend data
         body_data = outgoing_stock_schema.load(request.get_json())
         item_id = body_data.get("stock_item_id")
