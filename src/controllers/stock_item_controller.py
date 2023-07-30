@@ -73,7 +73,7 @@ def add_new_item():
             return {"error": "Item with same SKU already exist"}, 409
 
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
-            return {"error": f"The {err.orig.diag.column_name} is required"}, 409
+            return {"error": f"The {err.orig.diag.column_name} is required"}, 400
 
 
 # Update information about an item in stock_items table
