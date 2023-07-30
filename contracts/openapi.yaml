@@ -124,6 +124,165 @@ paths:
           description: Unauthorised
         "404":
           description: Customer not found      
+  /outgoingStocks/:
+    get:
+      tags:
+        - outgoing stock
+      summary: List outgoing stocks
+      description: Returns a list of outgoing stock
+      operationId: listOutgoingStocks
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOutgoingStockResponse"
+  /outgoingStocks/{outgoingStockId}/:
+    get:
+      parameters:
+        - name: outgoingStockId
+          in: path
+          description: Id of the outgoing stock
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - outgoing stock
+      summary: Get outgoing stock
+      description: Returns an outgoing stock
+      operationId: getOutgoingStock
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutgoingStock"
+        "404":
+          description: outgoing stock not found
+    delete:
+      parameters:
+        - name: outgoingStockId
+          in: path
+          description: Id of the outgoing stock to delete
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - outgoing stock
+      summary: Delete outgoing stock
+      description: Deletes an outgoing stock
+      operationId: deleteOutgoingStock
+      responses:
+        "200":
+          description: successful operation
+        "403":
+          description: Forbidden
+        "404":
+          description: outgoing stock not found
+  /outgoingStocks/receipts/{receiptId}/:
+    post:
+      tags:
+        - outgoing stock
+      summary: Create a new outgoing stock
+      description: Returns a newly created outgoing stock
+      operationId: createOutgoingStock
+      parameters:
+        - name: receiptId
+          in: path
+          description: Id of the recipt
+          required: true
+          schema:
+            format: integer
+            type: number
+      requestBody:
+        $ref: "#/components/schemas/CreateOutgoingStockRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutgoingStock"
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found (stock item or receipt)
+  /receipts/:
+    get:
+      tags:
+        - receipt
+      summary: List receipts
+      description: Returns a list of receipts
+      operationId: listReceipts
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListReceiptsResponse"
+    post:
+      tags:
+        - receipt
+      summary: Create a new receipt
+      description: Returns a newly created receipt
+      operationId: createReceipt
+      requestBody:
+        $ref: "#/components/schemas/CreateReceiptRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Receipt"
+        "400":
+          description: Bad Request
+        "403":
+          description: Unauthorised
+  /receipts/{receiptId}:
+    get:
+      parameters:
+        - name: receiptId
+          in: path
+          description: Id of the recipt
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - receipt
+      summary: Get receipt
+      description: Returns a receipt
+      operationId: getReceipt
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Receipt"
+        "404":
+          description: receipt not found
+    patch:
+      tags:
+        - receipt
+      summary: Update existing receipt
+      description: Returns updated receipt
+      operationId: updateReceipt
+      requestBody:
+        $ref: "#/components/schemas/UpdateReceiptRequest"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Bad request
   /shops/:
     get:
       tags:
@@ -568,7 +727,7 @@ components:
           type: string
         receipts:
           items:
-            $ref: "#/components/schemas/Receipt"
+            $ref: "#/components/schemas/CustomerReceipt"
           type: array
       required:
         - address
@@ -580,11 +739,64 @@ components:
         - phoneNumber
         - receipts
       type: object
+    CreateOutgoingStockRequest:
+      properties:
+        quantity:
+          format: integer
+          type: number
+        stockItem:
+          format: integer
+          type: number
+      required:
+        - quantity
+        - stockItem
+      type: object
+    ListOutgoingStockResponse:
+      items:
+        $ref: "#/components/schemas/OutgoingStock"
+      type: array
     ListCustomersResponse:
       items:
         $ref: "#/components/schemas/Customer"
       type: array
+    UpdateReceiptRequest:
+      properties:
+        isActive:
+          type: boolean
+      required:
+        - isActive
+      type: object
     Receipt:
+      properties:
+        customer:
+          $ref: "#/components/schemas/Customer"
+        date:
+          format: date-time
+          type: string
+        discount:
+          format: float
+          type: number
+        id:
+          format: integer
+          type: number
+        isActive:
+          type: boolean
+        outgoingStocks:
+          items:
+            $ref: "#/components/schemas/OutgoingStock"
+          type: array
+        paymentMethod:
+          type: string
+        purchaseType:
+          type: string
+        subtotal:
+          format: float
+          type: number
+        total:
+          format: float
+          type: number
+      type: object
+    CustomerReceipt:
       properties:
         date:
           format: date-time
@@ -741,6 +953,24 @@ components:
         - sku
         - unitPrice
       type: object
+    CreateReceiptRequest:
+      properties:
+        paymentMethod:
+          type: string
+        purchaseType:
+          type: string
+        customerId:
+          format: integer
+          type: number
+      required:
+        - paymentMethod
+        - purchaseType
+        - customerId
+      type: object
+    ListReceiptsResponse:
+      items:
+        $ref: "#/components/schemas/Receipt"
+      type: array
     ListStockItemResponse:
       items:
         $ref: "#/components/schemas/StockItem"
