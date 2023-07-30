@@ -245,11 +245,13 @@ ORM frameworks provide built-in security measures, such as parameterised queries
 
 ---
 
-### R5. Document all endpoints for your API
+### **R5. Document all endpoints for your API**
+
+Please open [openapi.html](./contracts/openapi.html) in your favourite Chromium-based web browser (E.g. Google Chrome browser, Brave browser, etc.)
 
 ---
 
-### R6. Inventory Management System ERD
+### **R6. Inventory Management System ERD**
 
 <br>
 
