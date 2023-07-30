@@ -3,6 +3,8 @@ from init import db
 from flask_jwt_extended import jwt_required
 from models.supplier import Supplier, supplier_schema, suppliers_schema
 from controllers.auth_controller import authorise_as_admin
+from sqlalchemy.exc import IntegrityError
+from psycopg2 import errorcodes
 
 suppliers_blueprint = Blueprint("suppliers", __name__, url_prefix="/suppliers")
 
@@ -31,23 +33,29 @@ def add_new_supplier():
     is_admin = authorise_as_admin()
     if not is_admin:
         return {"error": "Only Shop Manager can register new suppliers"}, 403
+    try:
+        # Access to frontend data
+        body_data = supplier_schema.load(request.get_json())
 
-    # Access to frontend data
-    body_data = supplier_schema.load(request.get_json())
+        # Create a new Supplier model instance using frontend data
+        supplier = Supplier(
+            name=body_data.get("name"),
+            email=body_data.get("email"),
+            address=body_data.get("address"),
+            phone_number=body_data.get("phone_number"),
+        )
+        # Add that supplier to the session
+        db.session.add(supplier)
+        # Commit session
+        db.session.commit()
+        # Respond to the client
+        return supplier_schema.dump(supplier), 201
 
-    # Create a new Supplier model instance using frontend data
-    supplier = Supplier(
-        name=body_data.get("name"),
-        email=body_data.get("email"),
-        address=body_data.get("address"),
-        phone_number=body_data.get("phone_number"),
-    )
-    # Add that supplier to the session
-    db.session.add(supplier)
-    # Commit session
-    db.session.commit()
-    # Respond to the client
-    return supplier_schema.dump(supplier), 201
+    except IntegrityError as err:
+        if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
+            return {"error": "Supplier email already exist"}, 409
+        if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
+            return {"error": f"The {err.orig.diag.column_name} is required"}, 400
 
 
 @suppliers_blueprint.route("/<int:id>", methods=["PATCH", "PUT"])
