@@ -34,8 +34,6 @@ def add_new_customer():
     is_admin = authorise_as_admin()
     if not is_admin:
         return {"error": "Only Shop Manager can register new customers"}, 403
-
-    # Check if customer already exist in db
     try:
         # Access to frontend data
         body_data = customer_schema.load(request.get_json())

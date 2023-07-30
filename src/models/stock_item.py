@@ -53,7 +53,7 @@ class StockItemSchema(CamelCasedSchema):
 
     status = fields.String(validate=OneOf(VALID_STATUSES))
 
-    @validates('status')
+    @validates("status")
     def validate_status(self, value):
         if value not in VALID_STATUSES:
             raise ValidationError(f"Invalid status. Must be one of {VALID_STATUSES}.")
@@ -74,9 +74,7 @@ class StockItemSchema(CamelCasedSchema):
             "minimum_stock",
             "special_tax",
             "status",
-            "shop",
-            "incoming_stocks",
-            "outgoing_stocks",
+            "shop_id",
         )
 
 

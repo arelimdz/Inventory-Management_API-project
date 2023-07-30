@@ -20,8 +20,10 @@ outgoing_stocks_blueprint = Blueprint(
 @outgoing_stocks_blueprint.route("/", methods=["GET"])
 @jwt_required()
 def get_all_outgoing_stock():
+    print("hello areli")
     stmt = db.select(OutgoingStock).order_by(OutgoingStock.id)
     outgoing_stock = db.session.scalars(stmt)
+    print(outgoing_stock)
     return outgoing_stocks_schema.dump(outgoing_stock)
 
 

@@ -29,8 +29,6 @@ class OutgoingStockSchema(CamelCasedSchema):
         exclude=[
             "markup_pct",
             "minimum_stock",
-            "incoming_stock",
-            "outgoing_stock",
             "id",
             "unit_cost",
             "status",
@@ -51,6 +49,7 @@ class OutgoingStockSchema(CamelCasedSchema):
             "tax",
             "subtotal",
             "total",
+            
         )
 
 

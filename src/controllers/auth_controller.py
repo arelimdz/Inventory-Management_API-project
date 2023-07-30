@@ -37,7 +37,7 @@ def auth_registrer():
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
             return {"error": "The email address is already in use"}, 409
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
-            return {"error": f"The {err.orig.diag.column_name} is required"}, 409
+            return {"error": f"The {err.orig.diag.column_name} is required"}, 400
 
 
 @auth_blueprint.route("/login", methods=["POST"])
