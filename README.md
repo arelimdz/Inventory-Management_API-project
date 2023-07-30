@@ -259,7 +259,7 @@ The following diagram was designed as a first step to outline the relationship b
 
 <br>
 
-![Inventory Management System- ERD](./img/ERD.jpg.png)
+![Inventory Management System- ERD](./img/ERD.jpg)
 
 Explanation:
 
