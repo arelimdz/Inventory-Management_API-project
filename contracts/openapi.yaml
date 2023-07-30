@@ -225,17 +225,6 @@ paths:
           description: Forbidden
         "404":
           description: Stock Item not found
-  /suppliers/:
-    get:
-      # TODO
-    post:
-      # TODO
-  /suppliers/{supplierId}:
-    get:
-      # TODO
-    patch:
-      # TODO
-
 components:
   schemas:
     UpdateStockItemRequest:
