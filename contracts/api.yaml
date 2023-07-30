@@ -68,7 +68,7 @@ paths:
         - customer
       summary: Update existing customer
       description: Returns updated customer
-      operationId: updatedCustomer
+      operationId: updateCustomer
       requestBody:
         $ref: "#/components/schemas/UpdateCustomerRequest"
       responses:
@@ -139,6 +139,82 @@ paths:
                 $ref: "#/components/schemas/Shop"
         "404":
           description: shop not found
+  /stockItems/:
+    get:
+      tags:
+        - stock item
+      summary: Get customers
+      description: Returns a list of stock items
+      operationId: getStockItems
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListStockItemResponse"
+    post:
+      tags:
+        - stock item
+      summary: Create a new stock item
+      description: Returns a newly created stock item
+      operationId: createStockItem
+      requestBody:
+        $ref: "#/components/schemas/CreateStockItemRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockItem"
+        "400":
+          description: Bad Request
+        "409":
+          description: Stock Item already exists
+  /stockItems/{stockItemId}/:
+    get:
+      parameters:
+        - name: stockItemId
+          in: path
+          description: Id of the stock item
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - stock item
+      summary: Get stock item
+      description: Returns a stock item
+      operationId: getStockItem
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockItem"
+        "404":
+          description: stock item not found
+    patch:
+      tags:
+        - stock item
+      summary: Update existing stock item
+      description: Returns updated stock item
+      operationId: updateStockItem
+      requestBody:
+        $ref: "#/components/schemas/UpdateStockItemRequest"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockItem"
+        "400":
+          description: Bad Request
+        "404":
+          description: Stock Item not found
   /suppliers/:
     get:
       # TODO
@@ -152,6 +228,21 @@ paths:
 
 components:
   schemas:
+    UpdateStockItemRequest:
+      properties:
+        category:
+          type: string
+        sku:
+          type: string
+        specialTax:
+          format: float
+          type: number
+        status:
+          type: string
+        unitPrice:
+          format: float
+          type: number
+      type: object
     UpdateCustomerRequest:
       properties:
         address:
@@ -167,6 +258,52 @@ components:
           type: string
         phoneNumber: 
           type: string
+      type: object
+    CreateStockItemRequest:
+      properties:
+        sku:
+          type: string
+        category:
+          type: string
+        itemBrand:
+          type: string
+        itemDescription:
+          type: string
+        itemName:
+          type: string
+        markupPct:
+          format: float
+          type: number
+        minimumStock:
+          format: integer
+          type: number
+        quantity:
+          format: integer
+          type: number
+        size:
+          type: string
+        specialTax:
+          format: float
+          type: number
+        unitCost:
+          format: float
+          type: number
+        shopId:
+          format: integer
+          type: number
+      required:
+        - sku
+        - category
+        - itemBrand
+        - itemDescription
+        - itemName
+        - markupPct
+        - minimumStock
+        - quantity
+        - size
+        - specialTax
+        - unitCost
+        - shopId
       type: object
     CreateShopRequest:
       properties:
@@ -343,6 +480,10 @@ components:
         - sku
         - unitPrice
       type: object
+    ListStockItemResponse:
+      items:
+        $ref: "#/components/schemas/StockItem"
+      type: array
     ListShopsResponse:
       items:
         $ref: "#/components/schemas/Shop"
