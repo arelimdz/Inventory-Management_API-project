@@ -6,13 +6,51 @@ info:
     email: areliemendoza.au@gmail.com
   version: 1.0.11
 paths:
+  /auth/login/:
+    post:
+      tags:
+        - auth
+      summary: Retrieve an auth token with user credentials
+      description: Returns an auth token
+      operationId: loginUser
+      requestBody:
+        $ref: "#/components/schemas/LoginUserRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticatedUser"
+        "401":
+          description: Unauthorised
+  /auth/register/:
+    post:
+      tags:
+        - auth
+      summary: Register a new user
+      description: Returns registered user details
+      operationId: registerUser
+      requestBody:
+        $ref: "#/components/schemas/RegisterUserRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisteredUser"
+        "400":
+          description: Bad Request
+        "409":
+          description: Email already in use
   /customers/:
     get:
       tags:
         - customer
-      summary: Get customers
+      summary: List customers
       description: Returns a list of customers
-      operationId: getCustomers
+      operationId: listCustomers
       responses:
         "200":
           description: successful operation
@@ -225,6 +263,86 @@ paths:
           description: Forbidden
         "404":
           description: Stock Item not found
+  /suppliers/:
+    get:
+      tags:
+        - supplier
+      summary: List suppliers
+      description: Returns a list of suppliers
+      operationId: listSuppliers
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListSuppliersResponse"
+    post:
+      tags:
+        - supplier
+      summary: Create a supplier
+      description: Returns a newly created supplier
+      operationId: createSupplier
+      requestBody:
+        $ref: "#/components/schemas/CreateSupplierRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "409":
+          description: Supplier email already exists
+  /suppliers/{supplierId}:
+    get:
+      tags:
+        - supplier
+      summary: Get a supplier
+      description: Returns a supplier
+      operationId: getSupplier
+      parameters:
+        - name: supplierId
+          in: path
+          description: Id of the supplier
+          required: true
+          schema:
+            format: integer
+            type: number
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        "404":
+          description: supplier not found
+    patch:
+      tags:
+        - supplier
+      summary: Update existing supplier
+      description: Returns updated supplier
+      operationId: updateSupplier
+      requestBody:
+        $ref: "#/components/schemas/UpdateSupplierRequest"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "404":
+          description: Supplier not found
 components:
   schemas:
     UpdateStockItemRequest:
@@ -257,6 +375,33 @@ components:
           type: string
         phoneNumber: 
           type: string
+      type: object
+    UpdateSupplierRequest:
+      properties:
+        address:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        phoneNumber:
+          type: string
+      type: object
+    CreateSupplierRequest:
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          type: string
+      required:
+        - name
+        - email
+        - phoneNumber
+        - address
       type: object
     CreateStockItemRequest:
       properties:
@@ -316,6 +461,69 @@ components:
         - address
         - description
         - shopName
+      type: object
+    RegisterUserRequest:
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+        shopId:
+          format: integer
+          type: number
+      required:
+        - email
+        - name
+        - password
+        - role
+        - shopId
+      type: object
+    RegisteredUser:
+      properties:
+        email:
+          type: string
+        id:
+          format: integer
+          type: number
+        isAdmin:
+          type: boolean
+        name:
+          type: string
+        role:
+          type: string
+        shope:
+          $ref: '#/components/schemas/RegisteredUserShop'
+      required:
+        - email
+        - isAdmin
+        - token
+      type: object
+    AuthenticatedUser:
+      properties:
+        email:
+          type: string
+        isAdmin:
+          type: boolean
+        token:
+          type: string
+      required:
+        - email
+        - isAdmin
+        - token
+      type: object
+    LoginUserRequest:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
       type: object
     CreateCustomerRequest:
       properties:
@@ -415,6 +623,32 @@ components:
         - subtotal
         - total
       type: object
+    IncomingStock:
+      properties:
+        date:
+          format: date-time
+          type: string
+        id:
+          format: number
+          type: integer
+        invoiceNumber:
+          type: string
+        itemCost:
+          format: float
+          type: number
+        quantity:
+          format: integer
+          type: number
+        stockItem:
+          $ref: "#/components/schemas/IncomingStockStockItem"
+      required:
+        - date
+        - id
+        - invoiceNumber
+        - itemCost
+        - quantity
+        - stockItem
+      type: object
     OutgoingStock:
       properties:
         id:
@@ -444,6 +678,34 @@ components:
         - subtotal
         - tax
         - total
+      type: object
+    IncomingStockStockItem:
+      properties:
+        id:
+          format: integer
+          type: number
+        itemBrand:
+          type: string
+        itemName:
+          type: string
+        quantity:
+          format: integer
+          type: number
+        size:
+          type: string
+        sku:
+          type: string
+        unitCost:
+          format: float
+          type: number
+      required:
+        - id
+        - itemBrand
+        - itemName
+        - quantity
+        - size
+        - sku
+        - unitCost
       type: object
     StockItem:
       properties:
@@ -487,6 +749,20 @@ components:
       items:
         $ref: "#/components/schemas/Shop"
       type: array
+    ListSuppliersResponse:
+      items:
+        $ref: "#/components/schemas/Supplier"
+      type: array
+    RegisteredUserShop:
+      properties:
+        address:
+          type: string
+        shopName:
+          type: string
+      required:
+        - address
+        - shopName
+      type: object
     Shop:
       properties:
         address:
@@ -508,13 +784,37 @@ components:
           type: array
       required:
         - address
-        - authorisedDiscount
-        - city
+        - description
+        - id
+        - shopName
+        - stockItems
+        - users
+      type: object
+    Supplier:
+      properties:
+        address:
+          type: string
+        email:
+          type: string
+        id:
+          format: integer
+          type: number
+        incomingStocks:
+          items:
+            $ref: "#/components/schemas/IncomingStock"
+          type: array
+        name:
+          type: string
+        phoneNumber:
+          type: string
+      required:
+        - address
         - email
         - id
+        - incomingStocks
+        - items
         - name
         - phoneNumber
-        - receipts
       type: object
     ShopStockItem:
       properties:
