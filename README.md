@@ -474,4 +474,40 @@ These are relationships between the models of the application:
 
 ### R10. Describe the way tasks are allocated and tracked in your project
 
-[Project Trello board](https://trello.com/invite/b/tgFTQwfJ/ATTIc57943c1fd1e8fbbdb95e8200289672c009A9831/inventory-management-system-api-project)
+The TRELLO web application was used to document and track the activities that needed to be carried out for this project.
+
+The planning of this project was done by dividing the activities into three parts, each of which was assigned a label to identify the activities that needed to be carried out in each part:
+
+- Design: Everything related to the planning and design of the models, and their relationship with each other in the database.
+
+  - Label color : Purple
+  - Label name: ERD
+  - Activity belongs to: Entity Relationship Diagram (ERD)
+
+- Implementation: This is related to the code, this part describes each activity performed during the process of building the application.
+
+  - Label color : Green
+  - Label name: IMPLEMENTATION
+  - Activity belongs to: Code
+
+- Documentation: All the activities related to the documentation of the project, such as the requirements by CoderAcademy, as well as the documentation of the endpoints of the application.
+
+  - Label color :Blue
+  - Label name: README
+  - Activity belongs to: The documentation in README
+
+You can find the assignment and description of the activities in more detail in the [Inventory Management System- Project Trello board](https://trello.com/invite/b/tgFTQwfJ/ATTIc57943c1fd1e8fbbdb95e8200289672c009A9831/inventory-management-system-api-project)
+
+Here are some screenshots at different times of the project:
+
+**July 13, 2023:**
+
+![Trello board 13 of July](./img/TrelloBoard-2023-07-13.png)
+
+**July 25, 2023:**
+
+![Trello board 25 of July](./img/TrelloBoard-2023-07-25.png)
+
+**July 30, 2023:**
+
+![Trello board 30 of July](./img/TrelloBoard-2023-07-30.png)
