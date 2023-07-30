@@ -1,0 +1,156 @@
+openapi: 3.0.3
+info:
+  title: Inventory Management System - OpenAPI 3.0
+  description: Inventory Management System
+  contact:
+    email: areliemendoza.au@gmail.com
+  version: 1.0.11
+paths:
+  /customers/:
+    get:
+      tags:
+        - customer
+      summary: Get customers
+      description: Returns a list of customers
+      operationId: getCustomers
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListCustomersResponse"
+components:
+  schemas:
+    Customer:
+      properties:
+        address:
+          type: string
+        authorisedDiscount:
+          format: float
+          type: number
+        city:
+          type: string
+        email:
+          type: string
+        id:
+          format: integer
+          type: number
+        name:
+          type: string
+        phoneNumber: 
+          type: string
+        receipts:
+          items:
+            $ref: "#/components/schemas/Receipt"
+          type: array
+      required:
+        - address
+        - authorisedDiscount
+      type: object
+    ListCustomersResponse:
+      items:
+        $ref: "#/components/schemas/Customer"
+      type: array
+    Receipt:
+      properties:
+        date:
+          format: date-time
+          type: string
+        discount:
+          format: float
+          type: number
+        id:
+          format: integer
+          type: number
+        isActive:
+          type: boolean
+        outgoingStocks:
+          items:
+            $ref: "#/components/schemas/OutgoingStock"
+          type: array
+        paymentMethod:
+          type: string
+        purchaseType:
+          type: string
+        subtotal:
+          format: float
+          type: number
+        total:
+          format: float
+          type: number
+      required:
+        - date
+        - discount
+        - id
+        - isActive
+        - outgoingStocks
+        - items
+        - paymentMethod
+        - purchaseType
+        - subtotal
+        - total
+      type: object
+    OutgoingStock:
+      properties:
+        id:
+          type: integer
+        quantity:
+          type: integer
+        stockItem:
+          $ref: "#/components/schemas/StockItem"
+        stockItemId:
+          format: integer
+          type: number
+        subtotal:
+          format: float
+          type: number
+        tax:
+          format: float
+          type: number
+        total:
+          format: float
+          type: number
+      required:
+        - id
+        - quantity
+        - stockItem
+        - stockItemId
+        - subtotal
+        - tax
+        - total
+      type: object
+    StockItem:
+      properties:
+        category:
+          type: string
+        itemBrand:
+          type: string
+        itemDescription:
+          type: string
+        itemName:
+          type: string
+        quantity:
+          format: integer
+          type: number
+        shopId:
+          format: integer
+          type: number
+        size:
+          type: string
+        sku:
+          type: string
+        unitPrice:
+          format: float
+          type: number
+      required:
+        - category
+        - itemBrand
+        - itemDescription
+        - itemName
+        - quantity
+        - shopId
+        - size
+        - sku
+        - unitPrice
+      type: object
