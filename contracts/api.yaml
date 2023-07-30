@@ -20,6 +20,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListCustomersResponse"
+  /customers/{customerId}:
+    get:
+      parameters:
+        - name: customerId
+          in: path
+          description: Id of the customer
+          required: true
+          schema:
+            type: string
+      tags:
+        - customer
+      summary: Get customer
+      description: Returns a customer
+      operationId: getCustomer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "404":
+          description: customer not found
 components:
   schemas:
     Customer:
