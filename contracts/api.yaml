@@ -20,6 +20,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListCustomersResponse"
+    post:
+      tags:
+        - customer
+      summary: Create a new customer
+      description: Returns a newly create customer
+      operationId: createCustomer
+      requestBody:
+        $ref: "#/components/schemas/CreateCustomerRequest"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Bad Request
+        "409":
+          description: Customer already exists
+
   /customers/{customerId}:
     get:
       parameters:
@@ -43,8 +63,66 @@ paths:
                 $ref: "#/components/schemas/Customer"
         "404":
           description: customer not found
+    patch:
+      tags:
+        - customer
+      summary: Update existing customer
+      description: Returns updated customer
+      operationId: updatedCustomer
+      requestBody:
+        $ref: "#/components/schemas/UpdateCustomerRequest"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Bad Request
+        "404":
+          description: Customer not found      
 components:
   schemas:
+    UpdateCustomerRequest:
+      properties:
+        address:
+          type: string
+        authorisedDiscount:
+          format: float
+          type: number
+        city:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        phoneNumber: 
+          type: string
+      type: object
+    CreateCustomerRequest:
+      properties:
+        address:
+          type: string
+        authorisedDiscount:
+          format: float
+          type: number
+        city:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        phoneNumber: 
+          type: string
+      required:
+        - address
+        - authorisedDiscount
+        - city
+        - email
+        - name
+        - phoneNumber
+      type: object
     Customer:
       properties:
         address:
@@ -70,6 +148,12 @@ components:
       required:
         - address
         - authorisedDiscount
+        - city
+        - email
+        - id
+        - name
+        - phoneNumber
+        - receipts
       type: object
     ListCustomersResponse:
       items:
