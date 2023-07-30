@@ -38,7 +38,7 @@ def add_new_item():
         body_data = stock_item_schema.load(request.get_json())
         item_cost = body_data.get("unit_cost")
         item_markup = body_data.get("markup_pct")
-        
+
         # Check if item with sku same as user new item sku already exist in db
         stmt = db.select(StockItem).filter_by(sku="sku")
         stock_item = db.session.scalar(stmt)
@@ -54,7 +54,7 @@ def add_new_item():
                 quantity=body_data.get("quantity"),
                 unit_cost=item_cost,
                 markup_pct=item_markup,
-                unit_price=item_cost*(1 + (item_markup/100)),
+                unit_price=item_cost * (1 + (item_markup / 100)),
                 minimum_stock=body_data.get("minimum_stock"),
                 sku=body_data.get("sku"),
                 special_tax=body_data.get("special_tax"),
@@ -99,7 +99,7 @@ def update_stock_item(id):
         stock_item.size = body_data.get("size") or stock_item.size
         stock_item.sku = body_data.get("sku") or stock_item.sku
         stock_item.category = body_data.get("category") or stock_item.category
-        # stock_item.quantity = body_data.get("quantity") or stock_item.quantity
+        stock_item.quantity = body_data.get("quantity") or stock_item.quantity
         stock_item.unit_price = body_data.get("unit_price") or stock_item.unit_price
         stock_item.markup_pct = body_data.get("markup_pct") or stock_item.markup_pct
         stock_item.minimum_stock = (

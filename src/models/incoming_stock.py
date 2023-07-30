@@ -31,6 +31,7 @@ class IncomingStock(db.Model):
 
 # Create a incoming_stock schema usign marshmallow
 class IncomingStockSchema(CamelCasedSchema):
+    item_cost = fields.Float()
     supplier = fields.Nested("SupplierSchema", only=["name", "id", "email"])
     stock_item = fields.Nested(
         "StockItemSchema",

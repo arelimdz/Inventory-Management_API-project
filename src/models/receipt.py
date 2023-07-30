@@ -30,9 +30,12 @@ class Receipt(db.Model):
 # Create a Receipt schema usign marshmallow
 class ReceiptSchema(CamelCasedSchema):
     customer = fields.Nested("CustomerSchema", exclude=["receipts"])
+    discount = fields.Float()
     outgoing_stocks = fields.List(
         fields.Nested("OutgoingStockSchema", exclude=["receipt"])
     )
+    subtotal = fields.Float()
+    total = fields.Float()
 
     class Meta:
         fields = (

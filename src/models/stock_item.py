@@ -22,14 +22,15 @@ class StockItem(db.Model):
     unit_price = db.Column(db.Numeric(100, 2), nullable=False)
     markup_pct = db.Column(db.Numeric(5, 2), nullable=False)
     minimum_stock = db.Column(db.Integer, nullable=False)
+
+    # Supplier SKU
     sku = db.Column(
         db.String,
         nullable=False,
         unique=True,
-    )  # Supplier SKU
-    special_tax = db.Column(
-        db.Numeric(5, 2), default=10
-    )  # Some products migth have special tax
+    )
+    # Some products migth have special tax
+    special_tax = db.Column(db.Numeric(5, 2), default=10)
     status = db.Column(db.String, default="Active")
 
     # Register Foreign Key
@@ -46,12 +47,16 @@ class StockItemSchema(CamelCasedSchema):
     incoming_stocks = fields.List(
         fields.Nested("IncomingStockSchema", exclude=["stock_item"])
     )
-    shop = fields.Nested("ShopSchema", only=["shop_name", "address"])
     outgoing_stocks = fields.List(
         fields.Nested("OutgoingStockSchema", exclude=["stock_item"])
     )
+    markup_pct = fields.Float()
 
+    shop = fields.Nested("ShopSchema", only=["shop_name", "address"])
+    special_tax = fields.Float()
     status = fields.String(validate=OneOf(VALID_STATUSES))
+    unit_cost = fields.Float()
+    unit_price = fields.Float()
 
     @validates("status")
     def validate_status(self, value):

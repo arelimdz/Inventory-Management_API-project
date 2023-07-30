@@ -24,6 +24,9 @@ class OutgoingStock(db.Model):
 
 # Create a outgoing_stock schema usign marshmallow
 class OutgoingStockSchema(CamelCasedSchema):
+    receipt = fields.Nested(
+        "ReceiptSchema", exclude=["outgoing_stocks", "is_active"], dump_only=True
+    )
     stock_item = fields.Nested(
         "StockItemSchema",
         exclude=[
@@ -35,9 +38,9 @@ class OutgoingStockSchema(CamelCasedSchema):
             "special_tax",
         ],
     )
-    receipt = fields.Nested(
-        "ReceiptSchema", exclude=["outgoing_stocks", "is_active"], dump_only=True
-    )
+    subtotal = fields.Float()
+    tax = fields.Float()
+    total = fields.Float()
 
     class Meta:
         fields = (
@@ -49,7 +52,6 @@ class OutgoingStockSchema(CamelCasedSchema):
             "tax",
             "subtotal",
             "total",
-            
         )
 
 
