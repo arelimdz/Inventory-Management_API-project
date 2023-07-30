@@ -4,15 +4,15 @@ This project will help small family businesses in Mexico to aid in their decisio
 
 ---
 
-# Instructions
+## Instructions
 
-## How to create a virtual env
+### Create a virtual env
 
 ```
 python -m venv .venv
 ```
 
-## How to enter to the virtual env
+### Activate virtual env
 
 ```
 source ./.venv/bin/activate
@@ -20,7 +20,7 @@ source ./.venv/bin/activate
 
 ---
 
-## Database and user creation
+### Initialise Postgres DB
 
 Mac users
 
@@ -34,65 +34,59 @@ Linux & WLS users
 sudo -u postgres psql
 ```
 
-### Create the database in PostgreSQL
+### Create database
 
 ```
 CREATE DATABASE db_name;
 ```
 
-Connect to the database:
+### Connect to the database:
 
 ```
 \c db_name;
 ```
 
-Create a user to manage this database:
+### Create a user to manage the database:
 
 ```
-
 CREATE USER username WITH PASSWORD 'password';
 ```
 
-and grant all permission to the user:
+### Grant all permission to the user:
 
 ```
 GRANT ALL PRIVILEGES ON DATABASE db_name TO username;
 ```
 
-Link ypur personal db with the app:
-
-1. Create a new file (.env)
-2. Store the URL of the database in "DATBASE_URL = "
-3. Store your JWT secret key in "JWT_SECRET_KEY ="
-
-flask --app src/main run
-or
-
-```cd src
-flask run
-```
-
-Grant permision to public schema to user:
+### Grant permision to public schema to user:
 
 ```
 GRANT ALL ON SCHEMA public TO username;
 ```
 
-## Features/Capabilities:
+### Link your personal DB with the app:
 
-- Create, Read and Delete incoming stock events
-- Create, Read and Delete outgoing stock events
-- Create, Read and Update stock items
-- Create, Read and Update customers
-- Create, Read and Update receipts
-- Create and Read shops
+1. Create a new file (.env)
+2. Store the URL of the database in "DATBASE_URL = "
+3. Store your JWT secret key in "JWT_SECRET_KEY ="
 
-- CRUDs price lists
-- Reports current stock levels by customer
-- Reports current stock levels by supplier
-- Reports order volume in monetery terms by customer within a date range
-- Reports order volumes by supplier (optionally and additionally by product) within a date range
-- Creates electronic receipts
+<br>
+
+### Considerations:
+
+For this project you need to cd into the folder src before run flask
+
+```
+$ cd src
+
+$ flask run
+```
+
+or
+
+```
+flask --app src/main run
+```
 
 ---
 
@@ -271,7 +265,7 @@ Following Crow's Foot Notation for the modelling of our database system we have 
 
 <br>
 
-### R7. Detail any third party services that your app will use
+### **R7. Detail any third party services used in the application**
 
 Each of these third-party libraries plays a crucial role in the development of the Inventory Management System Project. They provide essential functionalities such as web framework support, authentication, database interaction, serialization, and security measures. Integrating these libraries into the application allows for faster and more secure development. Additionally, the use of well-established and maintained libraries ensures that the application benefits from community-driven improvements and updates, contributing to its overall reliability and stability.
 
