@@ -22,6 +22,7 @@ class Customer(db.Model):
 # Create a customer schema usign marshmallow
 class CustomerSchema(CamelCasedSchema):
     receipts = fields.List(fields.Nested("ReceiptSchema", exclude=["customer"]))
+    authorised_discount = fields.Float()
 
     class Meta:
         fields = (
