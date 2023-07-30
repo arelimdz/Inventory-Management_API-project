@@ -37,6 +37,8 @@ paths:
                 $ref: "#/components/schemas/Customer"
         "400":
           description: Bad Request
+        "403":
+          description: Unauthorised
         "409":
           description: Customer already exists
   /customers/{customerId}:
@@ -80,6 +82,8 @@ paths:
                 $ref: "#/components/schemas/Customer"
         "400":
           description: Bad Request
+        "403":
+          description: Unauthorised
         "404":
           description: Customer not found      
   /shops/:
@@ -113,6 +117,8 @@ paths:
                 $ref: "#/components/schemas/Shop"
         "400":
           description: Bad Request
+        "403":
+          description: Unauthorised
         "409":
           description: Shop already exists
   /shops/{shopId}:
@@ -170,6 +176,8 @@ paths:
                 $ref: "#/components/schemas/StockItem"
         "400":
           description: Bad Request
+        "403":
+          description: Forbidden
         "409":
           description: Stock Item already exists
   /stockItems/{stockItemId}/:
@@ -213,6 +221,8 @@ paths:
                 $ref: "#/components/schemas/StockItem"
         "400":
           description: Bad Request
+        "403":
+          description: Forbidden
         "404":
           description: Stock Item not found
   /suppliers/:
