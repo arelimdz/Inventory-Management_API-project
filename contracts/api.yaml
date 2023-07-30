@@ -24,7 +24,7 @@ paths:
       tags:
         - customer
       summary: Create a new customer
-      description: Returns a newly create customer
+      description: Returns a newly created customer
       operationId: createCustomer
       requestBody:
         $ref: "#/components/schemas/CreateCustomerRequest"
@@ -39,7 +39,6 @@ paths:
           description: Bad Request
         "409":
           description: Customer already exists
-
   /customers/{customerId}:
     get:
       parameters:
@@ -48,7 +47,8 @@ paths:
           description: Id of the customer
           required: true
           schema:
-            type: string
+            format: integer
+            type: number
       tags:
         - customer
       summary: Get customer
@@ -82,6 +82,74 @@ paths:
           description: Bad Request
         "404":
           description: Customer not found      
+  /shops/:
+    get:
+      tags:
+        - shop
+      summary: Get shops
+      description: Returns a list of shops
+      operationId: getShops
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListShopsResponse"
+    post:
+      tags:
+        - shop
+      summary: Create a new shop
+      description: Returns a newly created shop
+      operationId: createShop
+      requestBody:
+        $ref: "#/components/schemas/CreateShopRequest"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shop"
+        "400":
+          description: Bad Request
+        "409":
+          description: Customer already exists
+  /shops/{shopId}:
+    get:
+      parameters:
+        - name: shopId
+          in: path
+          description: Id of the shop
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - shop
+      summary: Get shop
+      description: Returns a shop
+      operationId: getShop
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shop"
+        "404":
+          description: shop not found
+  /suppliers/:
+    get:
+      # TODO
+    post:
+      # TODO
+  /suppliers/{supplierId}:
+    get:
+      # TODO
+    patch:
+      # TODO
+
 components:
   schemas:
     UpdateCustomerRequest:
@@ -99,6 +167,19 @@ components:
           type: string
         phoneNumber: 
           type: string
+      type: object
+    CreateShopRequest:
+      properties:
+        address:
+          type: string
+        description:
+          type: string
+        shopName:
+          type: string
+      required:
+        - address
+        - description
+        - shopName
       type: object
     CreateCustomerRequest:
       properties:
@@ -201,6 +282,7 @@ components:
     OutgoingStock:
       properties:
         id:
+          format: number
           type: integer
         quantity:
           type: integer
@@ -260,4 +342,71 @@ components:
         - size
         - sku
         - unitPrice
+      type: object
+    ListShopsResponse:
+      items:
+        $ref: "#/components/schemas/Shop"
+      type: array
+    Shop:
+      properties:
+        address:
+          type: string
+        description:
+          type: string
+        id:
+          format: integer
+          type: number
+        shopName:
+          type: string
+        stockItems:
+          items:
+            $ref: "#/components/schemas/ShopStockItem"
+          type: array
+        users:
+          items:
+            $ref: "#/components/schemas/ShopUserItem"
+          type: array
+      required:
+        - address
+        - authorisedDiscount
+        - city
+        - email
+        - id
+        - name
+        - phoneNumber
+        - receipts
+      type: object
+    ShopStockItem:
+      properties:
+        itemName:
+          type: string
+        quantity:
+          format: integer
+          type: number
+        size:
+          type: string
+        sku:
+          type: string
+      required:
+        - itemName
+        - quantity
+        - size
+        - sku
+      type: object
+    ShopUserItem:
+      properties:
+        email:
+          type: string
+        id:
+          format: integer
+          type: number
+        isAdmin:
+          type: boolean
+        role:
+          type: string
+      required:
+        - email
+        - id
+        - isAdmin
+        - role
       type: object
