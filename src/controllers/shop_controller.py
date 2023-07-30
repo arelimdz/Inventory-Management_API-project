@@ -56,4 +56,4 @@ def add_new_shop():
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
             return {"error": "Shop name already exist"}, 409
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
-            return {"error": f"The {err.orig.diag.column_name} is required"}, 409
+            return {"error": f"The {err.orig.diag.column_name} is required"}, 400

@@ -88,6 +88,22 @@ or
 flask --app src/main run
 ```
 
+### API docmentation:
+
+#### How to view API documentation
+
+Open openapi.html file in your Chromium-based web browser, e.g. Google Chrome.
+
+#### How to update API docuemntation
+
+1. Update yaml source code
+2. Ensure you have [redoc-cli](https://www.npmjs.com/package/redoc-cli) installed, a tool to generate API documentation from yaml source code (requires NodeJS installation)
+3. Run the following command from the project root.
+
+```
+redoc-cli build ./contracts/openapi.yaml -o ./contracts/openapi.html
+```
+
 ---
 
 ## Project Requirement

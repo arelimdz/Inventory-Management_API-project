@@ -1,0 +1,1190 @@
+openapi: 3.0.3
+info:
+  title: Inventory Management System - OpenAPI 3.0
+  description: Inventory Management System
+  contact:
+    email: areliemendoza.au@gmail.com
+  version: 1.0.11
+paths:
+  /auth/login/:
+    post:
+      tags:
+        - auth
+      summary: Retrieve an auth token with user credentials
+      description: Returns an auth token
+      operationId: loginUser
+      requestBody:
+        $ref: "#/components/schemas/LoginUserRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticatedUser"
+        "401":
+          description: Unauthorised
+  /auth/register/:
+    post:
+      tags:
+        - auth
+      summary: Register a new user
+      description: Returns registered user details
+      operationId: registerUser
+      requestBody:
+        $ref: "#/components/schemas/RegisterUserRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisteredUser"
+        "400":
+          description: Bad Request
+        "409":
+          description: Email already in use
+  /customers/:
+    get:
+      tags:
+        - customer
+      summary: List customers
+      description: Returns a list of customers
+      operationId: listCustomers
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListCustomersResponse"
+    post:
+      tags:
+        - customer
+      summary: Create a new customer
+      description: Returns a newly created customer
+      operationId: createCustomer
+      requestBody:
+        $ref: "#/components/schemas/CreateCustomerRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Bad Request
+        "403":
+          description: Unauthorised
+        "409":
+          description: Customer already exists
+  /customers/{customerId}:
+    get:
+      parameters:
+        - name: customerId
+          in: path
+          description: Id of the customer
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - customer
+      summary: Get customer
+      description: Returns a customer
+      operationId: getCustomer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "404":
+          description: customer not found
+    patch:
+      tags:
+        - customer
+      summary: Update existing customer
+      description: Returns updated customer
+      operationId: updateCustomer
+      requestBody:
+        $ref: "#/components/schemas/UpdateCustomerRequest"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Bad Request
+        "403":
+          description: Unauthorised
+        "404":
+          description: Customer not found      
+  /incomingStocks/:
+    get:
+      tags:
+        - incoming stock
+      summary: List incoming stocks
+      description: Returns a list of incoming stock
+      operationId: listIncomingStocks
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListIncomingStockResponse"
+  /incomingStocks/{incomingStockId}:
+    delete:
+      parameters:
+        - name: incomingStockId
+          in: path
+          description: Id of the incoming stock to delete
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - incoming stock
+      summary: Delete incoming stock
+      description: Deletes an incoming stock
+      operationId: deleteOutgoingStock
+      responses:
+        "200":
+          description: successful operation
+        "403":
+          description: Forbidden
+        "404":
+          description: incoming stock not found
+    get:
+      parameters:
+        - name: incomingStockId
+          in: path
+          description: Id of the incoming stock
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - incoming stock
+      summary: Get incoming stock
+      description: Returns an incoming stock
+      operationId: getIncomingStock
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncomingStock"
+        "403":
+          description: Forbidden
+        "404":
+          description: Incoming stock not found
+  /outgoingStocks/:
+    get:
+      tags:
+        - outgoing stock
+      summary: List outgoing stocks
+      description: Returns a list of outgoing stock
+      operationId: listOutgoingStocks
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOutgoingStockResponse"
+  /outgoingStocks/{outgoingStockId}/:
+    delete:
+      parameters:
+        - name: outgoingStockId
+          in: path
+          description: Id of the outgoing stock to delete
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - outgoing stock
+      summary: Delete outgoing stock
+      description: Deletes an outgoing stock
+      operationId: deleteOutgoingStock
+      responses:
+        "200":
+          description: successful operation
+        "403":
+          description: Forbidden
+        "404":
+          description: outgoing stock not found
+    get:
+      parameters:
+        - name: outgoingStockId
+          in: path
+          description: Id of the outgoing stock
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - outgoing stock
+      summary: Get outgoing stock
+      description: Returns an outgoing stock
+      operationId: getOutgoingStock
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutgoingStock"
+        "404":
+          description: outgoing stock not found
+  /outgoingStocks/receipts/{receiptId}/:
+    post:
+      tags:
+        - outgoing stock
+      summary: Create a new outgoing stock
+      description: Returns a newly created outgoing stock
+      operationId: createOutgoingStock
+      parameters:
+        - name: receiptId
+          in: path
+          description: Id of the recipt
+          required: true
+          schema:
+            format: integer
+            type: number
+      requestBody:
+        $ref: "#/components/schemas/CreateOutgoingStockRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutgoingStock"
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found (stock item or receipt)
+  /receipts/:
+    get:
+      tags:
+        - receipt
+      summary: List receipts
+      description: Returns a list of receipts
+      operationId: listReceipts
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListReceiptsResponse"
+    post:
+      tags:
+        - receipt
+      summary: Create a new receipt
+      description: Returns a newly created receipt
+      operationId: createReceipt
+      requestBody:
+        $ref: "#/components/schemas/CreateReceiptRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Receipt"
+        "400":
+          description: Bad Request
+        "403":
+          description: Unauthorised
+  /receipts/{receiptId}:
+    get:
+      parameters:
+        - name: receiptId
+          in: path
+          description: Id of the recipt
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - receipt
+      summary: Get receipt
+      description: Returns a receipt
+      operationId: getReceipt
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Receipt"
+        "404":
+          description: receipt not found
+    patch:
+      tags:
+        - receipt
+      summary: Update existing receipt
+      description: Returns updated receipt
+      operationId: updateReceipt
+      requestBody:
+        $ref: "#/components/schemas/UpdateReceiptRequest"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Bad request
+  /shops/:
+    get:
+      tags:
+        - shop
+      summary: Get shops
+      description: Returns a list of shops
+      operationId: getShops
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListShopsResponse"
+    post:
+      tags:
+        - shop
+      summary: Create a new shop
+      description: Returns a newly created shop
+      operationId: createShop
+      requestBody:
+        $ref: "#/components/schemas/CreateShopRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shop"
+        "400":
+          description: Bad Request
+        "403":
+          description: Unauthorised
+        "409":
+          description: Shop already exists
+  /shops/{shopId}:
+    get:
+      parameters:
+        - name: shopId
+          in: path
+          description: Id of the shop
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - shop
+      summary: Get shop
+      description: Returns a shop
+      operationId: getShop
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shop"
+        "404":
+          description: shop not found
+  /stockItems/:
+    get:
+      tags:
+        - stock item
+      summary: Get customers
+      description: Returns a list of stock items
+      operationId: getStockItems
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListStockItemResponse"
+    post:
+      tags:
+        - stock item
+      summary: Create a new stock item
+      description: Returns a newly created stock item
+      operationId: createStockItem
+      requestBody:
+        $ref: "#/components/schemas/CreateStockItemRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockItem"
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "409":
+          description: Stock Item already exists
+  /stockItems/{stockItemId}/:
+    get:
+      parameters:
+        - name: stockItemId
+          in: path
+          description: Id of the stock item
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - stock item
+      summary: Get stock item
+      description: Returns a stock item
+      operationId: getStockItem
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockItem"
+        "404":
+          description: stock item not found
+    patch:
+      tags:
+        - stock item
+      summary: Update existing stock item
+      description: Returns updated stock item
+      operationId: updateStockItem
+      requestBody:
+        $ref: "#/components/schemas/UpdateStockItemRequest"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockItem"
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "404":
+          description: Stock Item not found
+  /suppliers/:
+    get:
+      tags:
+        - supplier
+      summary: List suppliers
+      description: Returns a list of suppliers
+      operationId: listSuppliers
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListSuppliersResponse"
+    post:
+      tags:
+        - supplier
+      summary: Create a supplier
+      description: Returns a newly created supplier
+      operationId: createSupplier
+      requestBody:
+        $ref: "#/components/schemas/CreateSupplierRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "409":
+          description: Supplier email already exists
+  /suppliers/{supplierId}:
+    get:
+      tags:
+        - supplier
+      summary: Get a supplier
+      description: Returns a supplier
+      operationId: getSupplier
+      parameters:
+        - name: supplierId
+          in: path
+          description: Id of the supplier
+          required: true
+          schema:
+            format: integer
+            type: number
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        "404":
+          description: supplier not found
+    patch:
+      tags:
+        - supplier
+      summary: Update existing supplier
+      description: Returns updated supplier
+      operationId: updateSupplier
+      requestBody:
+        $ref: "#/components/schemas/UpdateSupplierRequest"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "404":
+          description: Supplier not found
+components:
+  schemas:
+    UpdateStockItemRequest:
+      properties:
+        category:
+          type: string
+        sku:
+          type: string
+        specialTax:
+          format: float
+          type: number
+        status:
+          type: string
+        unitPrice:
+          format: float
+          type: number
+      type: object
+    UpdateCustomerRequest:
+      properties:
+        address:
+          type: string
+        authorisedDiscount:
+          format: float
+          type: number
+        city:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        phoneNumber: 
+          type: string
+      type: object
+    UpdateSupplierRequest:
+      properties:
+        address:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        phoneNumber:
+          type: string
+      type: object
+    CreateSupplierRequest:
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          type: string
+      required:
+        - name
+        - email
+        - phoneNumber
+        - address
+      type: object
+    CreateStockItemRequest:
+      properties:
+        sku:
+          type: string
+        category:
+          type: string
+        itemBrand:
+          type: string
+        itemDescription:
+          type: string
+        itemName:
+          type: string
+        markupPct:
+          format: float
+          type: number
+        minimumStock:
+          format: integer
+          type: number
+        quantity:
+          format: integer
+          type: number
+        size:
+          type: string
+        specialTax:
+          format: float
+          type: number
+        unitCost:
+          format: float
+          type: number
+        shopId:
+          format: integer
+          type: number
+      required:
+        - sku
+        - category
+        - itemBrand
+        - itemDescription
+        - itemName
+        - markupPct
+        - minimumStock
+        - quantity
+        - size
+        - specialTax
+        - unitCost
+        - shopId
+      type: object
+    CreateShopRequest:
+      properties:
+        address:
+          type: string
+        description:
+          type: string
+        shopName:
+          type: string
+      required:
+        - address
+        - description
+        - shopName
+      type: object
+    RegisterUserRequest:
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+        shopId:
+          format: integer
+          type: number
+      required:
+        - email
+        - name
+        - password
+        - role
+        - shopId
+      type: object
+    RegisteredUser:
+      properties:
+        email:
+          type: string
+        id:
+          format: integer
+          type: number
+        isAdmin:
+          type: boolean
+        name:
+          type: string
+        role:
+          type: string
+        shope:
+          $ref: '#/components/schemas/RegisteredUserShop'
+      required:
+        - email
+        - isAdmin
+        - token
+      type: object
+    AuthenticatedUser:
+      properties:
+        email:
+          type: string
+        isAdmin:
+          type: boolean
+        token:
+          type: string
+      required:
+        - email
+        - isAdmin
+        - token
+      type: object
+    LoginUserRequest:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+      type: object
+    CreateCustomerRequest:
+      properties:
+        address:
+          type: string
+        authorisedDiscount:
+          format: float
+          type: number
+        city:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        phoneNumber: 
+          type: string
+      required:
+        - address
+        - authorisedDiscount
+        - city
+        - email
+        - name
+        - phoneNumber
+      type: object
+    Customer:
+      properties:
+        address:
+          type: string
+        authorisedDiscount:
+          format: float
+          type: number
+        city:
+          type: string
+        email:
+          type: string
+        id:
+          format: integer
+          type: number
+        name:
+          type: string
+        phoneNumber: 
+          type: string
+        receipts:
+          items:
+            $ref: "#/components/schemas/CustomerReceipt"
+          type: array
+      required:
+        - address
+        - authorisedDiscount
+        - city
+        - email
+        - id
+        - name
+        - phoneNumber
+        - receipts
+      type: object
+    CreateOutgoingStockRequest:
+      properties:
+        quantity:
+          format: integer
+          type: number
+        stockItem:
+          format: integer
+          type: number
+      required:
+        - quantity
+        - stockItem
+      type: object
+    ListIncomingStockResponse:
+      items:
+        $ref: "#/components/schemas/IncomingStock"
+      type: array
+    ListOutgoingStockResponse:
+      items:
+        $ref: "#/components/schemas/OutgoingStock"
+      type: array
+    ListCustomersResponse:
+      items:
+        $ref: "#/components/schemas/Customer"
+      type: array
+    UpdateReceiptRequest:
+      properties:
+        isActive:
+          type: boolean
+      required:
+        - isActive
+      type: object
+    Receipt:
+      properties:
+        customer:
+          $ref: "#/components/schemas/Customer"
+        date:
+          format: date-time
+          type: string
+        discount:
+          format: float
+          type: number
+        id:
+          format: integer
+          type: number
+        isActive:
+          type: boolean
+        outgoingStocks:
+          items:
+            $ref: "#/components/schemas/OutgoingStock"
+          type: array
+        paymentMethod:
+          type: string
+        purchaseType:
+          type: string
+        subtotal:
+          format: float
+          type: number
+        total:
+          format: float
+          type: number
+      type: object
+    CustomerReceipt:
+      properties:
+        date:
+          format: date-time
+          type: string
+        discount:
+          format: float
+          type: number
+        id:
+          format: integer
+          type: number
+        isActive:
+          type: boolean
+        outgoingStocks:
+          items:
+            $ref: "#/components/schemas/OutgoingStock"
+          type: array
+        paymentMethod:
+          type: string
+        purchaseType:
+          type: string
+        subtotal:
+          format: float
+          type: number
+        total:
+          format: float
+          type: number
+      required:
+        - date
+        - discount
+        - id
+        - isActive
+        - outgoingStocks
+        - items
+        - paymentMethod
+        - purchaseType
+        - subtotal
+        - total
+      type: object
+    SupplierIncomingStock:
+      properties:
+        date:
+          format: date-time
+          type: string
+        id:
+          format: number
+          type: integer
+        invoiceNumber:
+          type: string
+        itemCost:
+          format: float
+          type: number
+        quantity:
+          format: integer
+          type: number
+        stockItem:
+          $ref: "#/components/schemas/SupplierIncomingStockStockItem"
+      required:
+        - date
+        - id
+        - invoiceNumber
+        - itemCost
+        - quantity
+        - stockItem
+      type: object
+    IncomingStock:
+      properties:
+        date:
+          format: date-time
+          type: string
+        id:
+          format: number
+          type: integer
+        invoiceNumber:
+          type: string
+        itemCost:
+          format: float
+          type: number
+        quantity:
+          format: integer
+          type: number
+        stockItem:
+          $ref: "#/components/schemas/SupplierIncomingStockStockItem"
+        supplier:
+          $ref: "#/components/schemas/IncomingStockSupplier"
+      required:
+        - date
+        - id
+        - invoiceNumber
+        - itemCost
+        - quantity
+        - stockItem
+        - supplier
+      type: object
+    OutgoingStock:
+      properties:
+        id:
+          format: number
+          type: integer
+        quantity:
+          type: integer
+        stockItem:
+          $ref: "#/components/schemas/StockItem"
+        stockItemId:
+          format: integer
+          type: number
+        subtotal:
+          format: float
+          type: number
+        tax:
+          format: float
+          type: number
+        total:
+          format: float
+          type: number
+      required:
+        - id
+        - quantity
+        - stockItem
+        - stockItemId
+        - subtotal
+        - tax
+        - total
+      type: object
+    SupplierIncomingStockStockItem:
+      properties:
+        id:
+          format: integer
+          type: number
+        itemBrand:
+          type: string
+        itemName:
+          type: string
+        quantity:
+          format: integer
+          type: number
+        size:
+          type: string
+        sku:
+          type: string
+        unitCost:
+          format: float
+          type: number
+      required:
+        - id
+        - itemBrand
+        - itemName
+        - quantity
+        - size
+        - sku
+        - unitCost
+      type: object
+    StockItem:
+      properties:
+        category:
+          type: string
+        itemBrand:
+          type: string
+        itemDescription:
+          type: string
+        itemName:
+          type: string
+        quantity:
+          format: integer
+          type: number
+        shopId:
+          format: integer
+          type: number
+        size:
+          type: string
+        sku:
+          type: string
+        unitPrice:
+          format: float
+          type: number
+      required:
+        - category
+        - itemBrand
+        - itemDescription
+        - itemName
+        - quantity
+        - shopId
+        - size
+        - sku
+        - unitPrice
+      type: object
+    CreateReceiptRequest:
+      properties:
+        paymentMethod:
+          type: string
+        purchaseType:
+          type: string
+        customerId:
+          format: integer
+          type: number
+      required:
+        - paymentMethod
+        - purchaseType
+        - customerId
+      type: object
+    ListReceiptsResponse:
+      items:
+        $ref: "#/components/schemas/Receipt"
+      type: array
+    ListStockItemResponse:
+      items:
+        $ref: "#/components/schemas/StockItem"
+      type: array
+    ListShopsResponse:
+      items:
+        $ref: "#/components/schemas/Shop"
+      type: array
+    ListSuppliersResponse:
+      items:
+        $ref: "#/components/schemas/Supplier"
+      type: array
+    RegisteredUserShop:
+      properties:
+        address:
+          type: string
+        shopName:
+          type: string
+      required:
+        - address
+        - shopName
+      type: object
+    Shop:
+      properties:
+        address:
+          type: string
+        description:
+          type: string
+        id:
+          format: integer
+          type: number
+        shopName:
+          type: string
+        stockItems:
+          items:
+            $ref: "#/components/schemas/ShopStockItem"
+          type: array
+        users:
+          items:
+            $ref: "#/components/schemas/ShopUserItem"
+          type: array
+      required:
+        - address
+        - description
+        - id
+        - shopName
+        - stockItems
+        - users
+      type: object
+    Supplier:
+      properties:
+        address:
+          type: string
+        email:
+          type: string
+        id:
+          format: integer
+          type: number
+        incomingStocks:
+          items:
+            $ref: "#/components/schemas/SupplierIncomingStock"
+          type: array
+        name:
+          type: string
+        phoneNumber:
+          type: string
+      required:
+        - address
+        - email
+        - id
+        - incomingStocks
+        - items
+        - name
+        - phoneNumber
+      type: object
+    IncomingStockSupplier:
+      properties:
+        email:
+          type: string
+        id:
+          format: integer
+          type: number
+        name:
+          type: string
+      required:
+        - email
+        - id
+        - name
+      type: object
+    ShopStockItem:
+      properties:
+        itemName:
+          type: string
+        quantity:
+          format: integer
+          type: number
+        size:
+          type: string
+        sku:
+          type: string
+      required:
+        - itemName
+        - quantity
+        - size
+        - sku
+      type: object
+    ShopUserItem:
+      properties:
+        email:
+          type: string
+        id:
+          format: integer
+          type: number
+        isAdmin:
+          type: boolean
+        role:
+          type: string
+      required:
+        - email
+        - id
+        - isAdmin
+        - role
+      type: object

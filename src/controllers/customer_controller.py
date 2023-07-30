@@ -56,9 +56,9 @@ def add_new_customer():
 
     except IntegrityError as err:
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
-            return {"error": "Customer name already exist"}, 409
+            return {"error": "Customer email already exist"}, 409
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
-            return {"error": f"The {err.orig.diag.column_name} is required"}, 409
+            return {"error": f"The {err.orig.diag.column_name} is required"}, 400
 
 
 @customers_blueprint.route("/<int:id>", methods=["PATCH", "PUT"])
