@@ -29,8 +29,8 @@ paths:
       requestBody:
         $ref: "#/components/schemas/CreateCustomerRequest"
       responses:
-        "200":
-          description: successful operation
+        "201":
+          description: Created
           content:
             application/json:
               schema:
@@ -105,8 +105,8 @@ paths:
       requestBody:
         $ref: "#/components/schemas/CreateShopRequest"
       responses:
-        "200":
-          description: successful operation
+        "201":
+          description: Created
           content:
             application/json:
               schema:
@@ -114,7 +114,7 @@ paths:
         "400":
           description: Bad Request
         "409":
-          description: Customer already exists
+          description: Shop already exists
   /shops/{shopId}:
     get:
       parameters:
