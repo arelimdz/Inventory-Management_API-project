@@ -48,10 +48,10 @@ def add_new_incoming_stock():
 
     try:
         # Access to the information from the frontend
-        body_data = incoming_stock_schema.load(request.get_json())
-        item_id = body_data.get("stock_item_id")
-        invoice = body_data.get("invoice_number")
-        new_cost = body_data.get("item_cost")
+        body_data = request.get_json()
+        item_id = body_data.get("stockItemId")
+        invoice = body_data.get("invoiceNumber")
+        new_cost = body_data.get("itemCost")
 
         # Check if stock_item exists in the database
         stock_item = StockItem.query.get(item_id)
@@ -62,9 +62,9 @@ def add_new_incoming_stock():
                 # Create a new IncomingStock model instance
                 incoming_stock = IncomingStock(
                     quantity=body_data.get("quantity"),
-                    item_cost=body_data.get("item_cost"),
+                    item_cost=new_cost,
                     invoice_number=invoice,
-                    supplier_id=body_data.get("supplier_id"),
+                    supplier_id=body_data.get("supplierId"),
                     stock_item_id=item_id,
                 )
                 # Add the incoming_stock to the session

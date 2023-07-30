@@ -53,13 +53,13 @@ def get_one_receipts(id):
 @jwt_required()
 def add_new_receipt():
     # Access to frontend data
-    body_data = receipt_schema.load(request.get_json())
+    body_data = request.get_json()
 
     # Create a new Receipt model instance using frontend data
     receipt = Receipt(
-        payment_method=body_data.get("payment_method"),
-        purchase_type=body_data.get("purchase_type"),
-        customer_id=body_data.get("customer_id"),
+        payment_method=body_data.get("paymentMethod"),
+        purchase_type=body_data.get("purchaseType"),
+        customer_id=body_data.get("customerId"),
         date=date.today(),
     )
     # Add that receipt to the session
