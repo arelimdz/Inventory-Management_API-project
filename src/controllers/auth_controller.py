@@ -10,7 +10,7 @@ auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
 
 @auth_blueprint.route("/register", methods=["POST"])
-def auth_registrer():
+def auth_register():
     try:
         # Access to the information from the frontend (user info) and stored it in the variable body_data
         body_data = request.get_json()

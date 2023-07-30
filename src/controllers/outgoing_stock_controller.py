@@ -94,18 +94,18 @@ def add_outgoing_stock_event(id):
 
                         # Respond to the client
                         return outgoing_stock_schema.dump(outgoing_stock), 201
-                    else:
-                        return {
-                            "error": f"Insufficient stock, {quantity_in_stock} pieces left"
-                        }, 400
-                else:
-                    return {"error": f"Item with id {item_id} is discontinued"}, 400
-            else:
-                return {"error": f"Item with id {item_id} not found"}, 404
-        else:
-            return {"error": "Item id and quantity required"}, 409
-    else:
-        return {"error": f"Receipt with id {id} not found or has been cancelled"}, 404
+
+                    return {
+                        "error": f"Insufficient stock, {quantity_in_stock} pieces left"
+                    }, 400
+
+                return {"error": f"Item with id {item_id} is discontinued"}, 400
+
+            return {"error": f"Item with id {item_id} not found"}, 404
+
+        return {"error": "Item id and quantity required"}, 409
+
+    return {"error": f"Receipt with id {id} not found or has been cancelled"}, 404
 
 
 # This route delete outgoing_stock and update stock_item
