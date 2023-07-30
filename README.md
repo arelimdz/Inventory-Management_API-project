@@ -4,7 +4,7 @@ This project will help small family businesses in Mexico to aid in their decisio
 
 ---
 
-# How to
+# Instructions
 
 ## How to create a virtual env
 
@@ -273,8 +273,55 @@ Following Crow's Foot Notation for the modelling of our database system we have 
 
 ### R7. Detail any third party services that your app will use
 
+Each of these third-party libraries plays a crucial role in the development of the Inventory Management System Project. They provide essential functionalities such as web framework support, authentication, database interaction, serialization, and security measures. Integrating these libraries into the application allows for faster and more secure development. Additionally, the use of well-established and maintained libraries ensures that the application benefits from community-driven improvements and updates, contributing to its overall reliability and stability.
+
+_All third parties used in this project are listed below:_
+
+1. **bcrypt**: Bcrypt is a library used for password hashing and encryption. It provides a secure way to store passwords by using a one-way hash function, making it difficult for attackers to reverse engineer passwords even if the database is compromised.
+
+2. **blinker**: Blinker is a lightweight library used for signal and event handling. It allows different components of the application to communicate and respond to events in a decoupled manner.
+
+3. **click**: Click is a command-line interface (CLI) library for Python. It simplifies the creation of command-line interfaces, making it easy to define and organize commands and options for the application.
+
+4. **Flask**: Flask is a popular web framework for Python. It provides the foundation for building web applications, handling routing, request/response handling, and etc.
+
+5. **Flask-Bcrypt**: Flask-Bcrypt is a Flask extension that integrates Bcrypt for password hashing. It simplifies the process of securely handling passwords in Flask applications.
+
+6. **Flask-JWT-Extended**: Flask-JWT-Extended is a Flask extension for JSON Web Tokens (JWT) authentication. It allows secure token-based authentication for protecting routes and resources.
+
+7. **flask-marshmallow**: Flask-Marshmallow is a Flask extension for integrating the Marshmallow library. It provides easy serialization and deserialization of complex data types, making it convenient to handle request and response data in Flask applications.
+
+8. **Flask-SQLAlchemy**: Flask-SQLAlchemy is a Flask extension that simplifies the integration of SQLAlchemy. It allows easy database manipulation using Python classes instead of raw SQL queries.
+
+9. **greenlet**: Greenlet is a lightweight concurrency library. It provides a simple way to switch between tasks and manage concurrency in a cooperative manner.
+
+10. **itsdangerous**: Itsdangerous is a library used for various cryptographic operations in Flask applications, such as generating secure tokens and signing data.
+
+11. **Jinja2**: Jinja2 is a powerful template engine used in Flask applications for rendering HTML templates. It allows developers to separate presentation logic from application logic.
+
+12. **MarkupSafe**: MarkupSafe is a library used for escaping and preserving markup in templates. It prevents code injection attacks and ensures that user-provided data is displayed safely.
+
+13. **marshmallow**: Marshmallow is a powerful library for object serialization and deserialization. It simplifies the process of converting complex data types to and from JSON representations.
+
+14. **marshmallow-sqlalchemy**: Marshmallow-SQLAlchemy is an extension of Marshmallow that integrates with SQLAlchemy. It provides automatic schema generation for SQLAlchemy models, making it easier to serialize and deserialize database objects.
+
+15. **packaging**: Packaging is a library used for Python package metadata handling. It helps in managing package dependencies and versions.
+
+16. **psycopg2-binary**: Psycopg2 is a PostgreSQL adapter for Python. It enables Python applications to interact with PostgreSQL databases.
+
+17. **PyJWT**: PyJWT is a library used for encoding and decoding JSON Web Tokens. It provides utilities for working with JWTs in Python applications.
+
+18. **python-dotenv**: Python-dotenv is a library that loads environment variables from a `.env` file, making it easy to manage configuration settings for the application.
+
+19. **SQLAlchemy**: SQLAlchemy is a powerful and popular Object-Relational Mapping (ORM) library for Python. It provides a high-level interface to interact with databases using Python classes and objects.
+
+20. **typing_extensions**: Typing-extensions is a library that backports new features in Python's typing module to older Python versions. It helps improve code readability and maintainability with static type checking.
+
+21. **Werkzeug**: Werkzeug is a WSGI (Web Server Gateway Interface) utility library used in Flask applications. It provides various tools and utilities for handling HTTP requests and responses.
+
 ### **R8. Relationship between models in the inventory management system database**
 
+<br>
 These are relationships between the models of the application:
 
 1. _Supplier Model:_
@@ -472,7 +519,9 @@ These are relationships between the models of the application:
 
 <br>
 
-### R10. Describe the way tasks are allocated and tracked in your project
+### **R10. Describe the way tasks are allocated and tracked in your project**
+
+<br>
 
 The TRELLO web application was used to document and track the activities that needed to be carried out for this project.
 
