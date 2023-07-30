@@ -97,7 +97,7 @@ def add_outgoing_stock_event(id):
                             "error": f"Insufficient stock, {quantity_in_stock} pieces left"
                         }, 400
                 else:
-                    return {"error": f"Item with id {item_id} is discontinued"}
+                    return {"error": f"Item with id {item_id} is discontinued"}, 400
             else:
                 return {"error": f"Item with id {item_id} not found"}, 404
         else:

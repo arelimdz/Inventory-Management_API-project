@@ -78,11 +78,11 @@ def add_new_incoming_stock():
             else:
                 return {
                     "message": f"There is a cost change on item with id {item_id}, you need to update item unit_cost"
-                }
+                }, 422
         else:
             return {
                 "error": f"Item with id {item_id} not found, You need to register a new item"
-            }
+            }, 404
     except IntegrityError as err:
         # Check if incoming_stock event is not duplicate
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
