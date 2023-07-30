@@ -4,15 +4,15 @@ This project will help small family businesses in Mexico to aid in their decisio
 
 ---
 
-# How to
+## Instructions
 
-## How to create a virtual env
+### Create a virtual env
 
 ```
 python -m venv .venv
 ```
 
-## How to enter to the virtual env
+### Activate virtual env
 
 ```
 source ./.venv/bin/activate
@@ -20,7 +20,7 @@ source ./.venv/bin/activate
 
 ---
 
-## Database and user creation
+### Initialise Postgres DB
 
 Mac users
 
@@ -34,65 +34,59 @@ Linux & WLS users
 sudo -u postgres psql
 ```
 
-### Create the database in PostgreSQL
+### Create database
 
 ```
 CREATE DATABASE db_name;
 ```
 
-Connect to the database:
+### Connect to the database:
 
 ```
 \c db_name;
 ```
 
-Create a user to manage this database:
+### Create a user to manage the database:
 
 ```
-
 CREATE USER username WITH PASSWORD 'password';
 ```
 
-and grant all permission to the user:
+### Grant all permission to the user:
 
 ```
 GRANT ALL PRIVILEGES ON DATABASE db_name TO username;
 ```
 
-Link ypur personal db with the app:
-
-1. Create a new file (.env)
-2. Store the URL of the database in "DATBASE_URL = "
-3. Store your JWT secret key in "JWT_SECRET_KEY ="
-
-flask --app src/main run
-or
-
-```cd src
-flask run
-```
-
-Grant permision to public schema to user:
+### Grant permision to public schema to user:
 
 ```
 GRANT ALL ON SCHEMA public TO username;
 ```
 
-## Features/Capabilities:
+### Link your personal DB with the app:
 
-- Create, Read and Delete incoming stock events
-- Create, Read and Delete outgoing stock events
-- Create, Read and Update stock items
-- Create, Read and Update customers
-- Create, Read and Update receipts
-- Create and Read shops
+1. Create a new file (.env)
+2. Store the URL of the database in "DATBASE_URL = "
+3. Store your JWT secret key in "JWT_SECRET_KEY ="
 
-- CRUDs price lists
-- Reports current stock levels by customer
-- Reports current stock levels by supplier
-- Reports order volume in monetery terms by customer within a date range
-- Reports order volumes by supplier (optionally and additionally by product) within a date range
-- Creates electronic receipts
+<br>
+
+### Considerations:
+
+For this project you need to cd into the folder src before run flask
+
+```
+$ cd src
+
+$ flask run
+```
+
+or
+
+```
+flask --app src/main run
+```
 
 ---
 
@@ -271,20 +265,218 @@ Following Crow's Foot Notation for the modelling of our database system we have 
 
 <br>
 
+### **R7. Detail any third party services used in the application**
 
+Each of these third-party libraries plays a crucial role in the development of the Inventory Management System Project. They provide essential functionalities such as web framework support, authentication, database interaction, serialization, and security measures. Integrating these libraries into the application allows for faster and more secure development. Additionally, the use of well-established and maintained libraries ensures that the application benefits from community-driven improvements and updates, contributing to its overall reliability and stability.
 
+_All third parties used in this project are listed below:_
 
+1. **bcrypt**: Bcrypt is a library used for password hashing and encryption. It provides a secure way to store passwords by using a one-way hash function, making it difficult for attackers to reverse engineer passwords even if the database is compromised.
 
-### R7. Detail any third party services that your app will use
+2. **blinker**: Blinker is a lightweight library used for signal and event handling. It allows different components of the application to communicate and respond to events in a decoupled manner.
 
+3. **click**: Click is a command-line interface (CLI) library for Python. It simplifies the creation of command-line interfaces, making it easy to define and organize commands and options for the application.
 
+4. **Flask**: Flask is a popular web framework for Python. It provides the foundation for building web applications, handling routing, request/response handling, and etc.
 
+5. **Flask-Bcrypt**: Flask-Bcrypt is a Flask extension that integrates Bcrypt for password hashing. It simplifies the process of securely handling passwords in Flask applications.
 
-### R8. Relationship between models in the inventory management system database
+6. **Flask-JWT-Extended**: Flask-JWT-Extended is a Flask extension for JSON Web Tokens (JWT) authentication. It allows secure token-based authentication for protecting routes and resources.
 
-R8 Explain the models and relationships involved in the database based on the Flask / SQLAlchemy / etc code that you've implemented. Your answer to R8 is based on what you ended up coding in your API so it should be done towards the end of the project. Use terminology appropriate to Flask/SQLAlchemy/etc like "back_populates" and "cascade" when writing up R8.
+7. **flask-marshmallow**: Flask-Marshmallow is a Flask extension for integrating the Marshmallow library. It provides easy serialization and deserialization of complex data types, making it convenient to handle request and response data in Flask applications.
 
+8. **Flask-SQLAlchemy**: Flask-SQLAlchemy is a Flask extension that simplifies the integration of SQLAlchemy. It allows easy database manipulation using Python classes instead of raw SQL queries.
 
+9. **greenlet**: Greenlet is a lightweight concurrency library. It provides a simple way to switch between tasks and manage concurrency in a cooperative manner.
+
+10. **itsdangerous**: Itsdangerous is a library used for various cryptographic operations in Flask applications, such as generating secure tokens and signing data.
+
+11. **Jinja2**: Jinja2 is a powerful template engine used in Flask applications for rendering HTML templates. It allows developers to separate presentation logic from application logic.
+
+12. **MarkupSafe**: MarkupSafe is a library used for escaping and preserving markup in templates. It prevents code injection attacks and ensures that user-provided data is displayed safely.
+
+13. **marshmallow**: Marshmallow is a powerful library for object serialization and deserialization. It simplifies the process of converting complex data types to and from JSON representations.
+
+14. **marshmallow-sqlalchemy**: Marshmallow-SQLAlchemy is an extension of Marshmallow that integrates with SQLAlchemy. It provides automatic schema generation for SQLAlchemy models, making it easier to serialize and deserialize database objects.
+
+15. **packaging**: Packaging is a library used for Python package metadata handling. It helps in managing package dependencies and versions.
+
+16. **psycopg2-binary**: Psycopg2 is a PostgreSQL adapter for Python. It enables Python applications to interact with PostgreSQL databases.
+
+17. **PyJWT**: PyJWT is a library used for encoding and decoding JSON Web Tokens. It provides utilities for working with JWTs in Python applications.
+
+18. **python-dotenv**: Python-dotenv is a library that loads environment variables from a `.env` file, making it easy to manage configuration settings for the application.
+
+19. **SQLAlchemy**: SQLAlchemy is a powerful and popular Object-Relational Mapping (ORM) library for Python. It provides a high-level interface to interact with databases using Python classes and objects.
+
+20. **typing_extensions**: Typing-extensions is a library that backports new features in Python's typing module to older Python versions. It helps improve code readability and maintainability with static type checking.
+
+21. **Werkzeug**: Werkzeug is a WSGI (Web Server Gateway Interface) utility library used in Flask applications. It provides various tools and utilities for handling HTTP requests and responses.
+
+### **R8. Relationship between models in the inventory management system database**
+
+<br>
+These are relationships between the models of the application:
+
+1. _Supplier Model:_
+
+   The “Supplier” model represents a table named “suppliers” in the database. It has the following attributes:
+
+   - id: An integer field and the primary key of the "suppliers" table.
+   - name: A string field that stores the name of the supplier. It is unique and cannot be null.
+   - email: A string field that stores the email address of the supplier. It is unique and cannot be null.
+   - phone_number: A string field that stores the phone number of the supplier.
+   - address: A string field that stores the address of the supplier.
+
+   The model has an attribute named “incoming_stock” that defines the relationship with the StockItem using the db.relationship decorator that back-populates the Supplier object. This relationship is a one-to-many relationship and it means that one supplier can have multiple incoming stocks, but each incoming stock belongs to only one supplier.
+
+1. _IncomingStock Model:_
+
+   The IncomingStock model represents a table named "incoming_stocks" in the database.
+
+   It has the following attributes:
+
+   - id: An integer field and the primary key of the "incoming_stocks" table.
+   - date: A date field that stores the date of the incoming stock.
+   - quantity: An integer field that stores the quantity of items in the incoming stock. It cannot be null.
+   - item_cost: A numeric field that stores the cost of the items in the incoming stock. It cannot be null.
+   - invoice_number: A string field that stores the invoice number for the incoming stock. It cannot be null.
+
+   The model also includes two foreign keys:
+
+   - supplier_id: An integer field that references the id column of the "suppliers" table.
+   - stock_item_id: An integer field that references the id column of the "stock_items" table.
+
+   The model has an attribute named “supplier” that defines the relationship with the Supplier object using the db.relationship decorator, that back-populates the IncomingStock object. This relationship is a many-to-one relationship and it means that many incoming stocks can belong to only one supplier.
+
+   The attribute “stock_item” defines the relationship with the StockItem object that back-populates IncomingStock objects. This is a many-to-one relationship, meaning that many incoming_stock events can be of the same stock item.
+
+1. _StockItem Model_
+
+   The StockItem model represent a table named "stock_items" in the data base.
+   It has the following attributes:
+
+   - id: An integer field and the primary key of the "stock_items" table.
+   - item_name: An String field that stores the item name in the stock_item.It admits a maximum of 50 characters and cannot be null.
+   - item_description: An string field thar store the description of the item of the stock item. It admits a maximum of 100 characters and cannot be null.
+   - item_brand: An string field thar store the brand of the item of the stock item. It cannot be null.
+   - size: An string field thar store the size of the item of the stock item. It cannot be null.
+   - category: An string field thar store the category of the item of the stock item. It cannot be null.
+   - quantity: An integer field that stores the quantity of items in the stock Item. It cannot be null.
+   - unit_cost: An Numeric field that stores the unit cost of items in the stock item. It cannot be null.
+   - unit_price: An Numeric field that stores the unit price of items in the stock item. It cannot be null.
+   - markup_pct: An Numeric field that stores the markup percentage (profit margin) of items in the stock item. It cannot be null.
+   - minimum_stock: An integer field that stores the minimum stock amount that an item can have in the stock items. It cannot be null
+   - sku: An String field that stores sku of an item in the stock items, this need to be unique and cannot be null.
+   - special_tax: An Numeric fiel that stores special tax that an item of the stock item migth have and it has a default value of 10.
+   - status: An string that stores the current status of the item, this can be only: "Active", "Discontinued", "Broken", "Incomplete". It has a default value of "Active".
+
+   The model also includes a foreign key:
+
+   - shop_id: An integer field that references the id column of the "shops" table.
+
+   The model has three registered relationships
+
+   - incoming_stocks: defines the relationship between the StockItem and IncomingStock objects, and back populates the stock_item. This relationship is a one to many, this means that one stock item can have one or many incoming stocks events relate to.
+   - shops: defines the relationship between the StockItem and Shops objects, and back populates the stock_item. This relationship is a many to one, this means that many stock items can belong to the same shop, but one shop can have many stock items.
+   - outgoing_stocks: defines the relationship between the StockItem and OutgoingStock objects, and back populates the stock_item. This relationship is a one to many, this means that one stock item can have one or many outgoing stocks events.
+
+1. _Receipt Model_
+
+   The Receipt model represent a table named "receipts" in the data base.
+
+   It has the following attributes:
+
+   - id: An integer field and the primary key of the "receipts" table.
+   - date: An Date field that represent the date of the receipts creation. This is generated automatically.
+   - total: An Numeric field that stores the total of the purchase it has a default value of 0.
+   - discount: An Numeric field that stores the total discount that is apply on the purchase and it has a default value of 0.
+   - subtotal: An Numeric field that stores the purchase subtotsl and it has a default value of 0.
+   - is_active: A boolean field that stores True or False and it refers if the receipt has been cancelled or not. It has a default value of True.
+   - payment_method: An string field that stores the paymenent method use to pay the purchase. I cannot be null.
+   - purchase_type: An string field that stores the type of purchase. I cannot be null.
+
+   The model also includes a foreign key:
+
+   - customer_id: An integer field that references the id column of the "customers" table.
+
+   The model has two registered relationships:
+
+   - customer: this attribute define the relationship between Customer and Receipt objects, and back-populate the receipt with the information customer link with the customer_id foreing key. This a many to one relationship where many receipts can belong only to one customer.
+
+   - outgoing_stocks: defines the relationship with the OutogingStock object and back-populates receipts with the items in the outgoing_stocks that share the same receipt_id. This is a one to many relationship, where one receipt can have one or many ougoing stock events.
+
+1. _Customer Model_
+
+   The Customer model represent the table named "customers" in the data base.
+
+   It has the following attributes:
+
+   - id: An integer field and the primary key of the "customers" table.
+   - name: An string field that stores the customer name and it cannot be null.
+   - email: An string field that stores the customer email, need to be unique and it cannot be null.
+   - address: An string field that stores the customer address and it cannot be null.
+   - city: An string field that stores the city where the customer is lives and it cannot be null.
+   - phone_number: An string field that stores the customer phone number and it cannot be null.
+   - authorised_discount: An numeric field that stores the percentage discount autorised for the customer, it has a default value of 0.
+
+   The model has one registered relationship:
+   receipts: this attribute define the relationship between Customer and Receipt objects. It back-populates the customer object with the all the receipts that share the same customer_id. This a one to many relationship where one customer can have many receipts.
+
+1. _Shop Model_
+
+   The Shop model represent the table named "shops" in the data base.
+   It has the following attributes:
+
+   - id: An integer field and the primary key of the "shops" table.
+   - shop_name: An string field that stores the shop name, need to be unique and it cannot be null.
+   - address: An string field that stores the shop address and it cannot be null.
+   - description: An string field that stores a short description of the shop.It admits a maximum of 100 characters and cannot be null.
+
+   The model has two registered relationship:
+
+   - users: this attribute define the relationship between Shop and User objects. It back-populates the shop object with all users that share the same shop_id. This is a one to many relationship where one shop can have many users. The information of the user that is retrived exclude the user password.
+
+   - stocks_items: defines the relatioship with the Shop object and back-populates the shop objects with all stock items that share the same shop_id. This is a one to many relationship where one shop can have many stock items.
+
+1. _User Model_
+
+   The User model represent the table named "users" in the data base.
+   It has the following attributes:
+
+   - id: An integer field and the primary key of the "users" table.
+   - name: An string field that stores the user name and it cannot be null.
+   - email: An string field that stores the user email, need to be unique and it cannot be null.
+   - role: An string field that stores the user role and it cannot be null.
+   - is_admin: A boolean field that stores True or False and it refers if the user is admin. It has a default value of False.
+
+   The model also includes a foreign key:
+   shop_id: An integer field that references the id column of the "shops" table.
+
+   The model has one registered relationship:
+   shop: this attribute define the relationship between User and Shop objects. It back-populates the User object with the information (shop name and address) that is linked with the shop_id. This is many to one relationship where many user can belong to the same shop.
+
+1. _OutgoingStock Model_
+
+   The User model represent the table named "outgoing_stocks" in the data base.
+   It has the following attributes:
+
+   - id: An integer field and the primary key of the "outgoing_stocks" table.
+   - quantity: An integer field that stores the quantity of items in the outgoing stock. It cannot be null.
+   - subtotal: A numeric field that stores the subtotal value in the outgoing stock.
+   - tax: A numeric field that stores the tax value in the outgoing stock.
+   - total: A numeric field that stores the total value in the outgoing stock.
+
+   The model also includes two foreign keys:
+
+   - receipt_id: An integer field that references the id column of the "receipts" table.
+   - stock_item_id: An integer field that references the id column of the "stock_items" table.
+
+   The model has two registered relationship:
+
+   - receipt: defines the relationship with the Receipt object and populates the outgoing_stock with the receipt information that is related through the shop_id attribute. This is a many to one relationship in which many outgoing_stock events can share the same receipt.
+
+   - stock_item: defines the relationship between the OutgoingStock and StockItem objects, and back populates the outgoing_stock with the stock_item information excluding: "markup_pct", "minimum_stock", "id", "unit_cost", "status","special_tax". This relationship many to one relationship where many outgoing_stocks events can be related to one stock_item.
 
 <br>
 
@@ -321,7 +513,44 @@ R8 Explain the models and relationships involved in the database based on the Fl
 
 <br>
 
+### **R10. Describe the way tasks are allocated and tracked in your project**
 
+<br>
 
+The TRELLO web application was used to document and track the activities that needed to be carried out for this project.
 
-### R10. Describe the way tasks are allocated and tracked in your project
+The planning of this project was done by dividing the activities into three parts, each of which was assigned a label to identify the activities that needed to be carried out in each part:
+
+- Design: Everything related to the planning and design of the models, and their relationship with each other in the database.
+
+  - Label color : Purple
+  - Label name: ERD
+  - Activity belongs to: Entity Relationship Diagram (ERD)
+
+- Implementation: This is related to the code, this part describes each activity performed during the process of building the application.
+
+  - Label color : Green
+  - Label name: IMPLEMENTATION
+  - Activity belongs to: Code
+
+- Documentation: All the activities related to the documentation of the project, such as the requirements by CoderAcademy, as well as the documentation of the endpoints of the application.
+
+  - Label color :Blue
+  - Label name: README
+  - Activity belongs to: The documentation in README
+
+You can find the assignment and description of the activities in more detail in the [Inventory Management System- Project Trello board](https://trello.com/invite/b/tgFTQwfJ/ATTIc57943c1fd1e8fbbdb95e8200289672c009A9831/inventory-management-system-api-project)
+
+Here are some screenshots at different times of the project:
+
+**July 13, 2023:**
+
+![Trello board 13 of July](./img/TrelloBoard-2023-07-13.png)
+
+**July 25, 2023:**
+
+![Trello board 25 of July](./img/TrelloBoard-2023-07-25.png)
+
+**July 30, 2023:**
+
+![Trello board 30 of July](./img/TrelloBoard-2023-07-30.png)
