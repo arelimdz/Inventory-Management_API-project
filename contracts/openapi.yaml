@@ -124,6 +124,67 @@ paths:
           description: Unauthorised
         "404":
           description: Customer not found      
+  /incomingStocks/:
+    get:
+      tags:
+        - incoming stock
+      summary: List incoming stocks
+      description: Returns a list of incoming stock
+      operationId: listIncomingStocks
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListIncomingStockResponse"
+  /incomingStocks/{incomingStockId}:
+    delete:
+      parameters:
+        - name: incomingStockId
+          in: path
+          description: Id of the incoming stock to delete
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - incoming stock
+      summary: Delete incoming stock
+      description: Deletes an incoming stock
+      operationId: deleteOutgoingStock
+      responses:
+        "200":
+          description: successful operation
+        "403":
+          description: Forbidden
+        "404":
+          description: incoming stock not found
+    get:
+      parameters:
+        - name: incomingStockId
+          in: path
+          description: Id of the incoming stock
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - incoming stock
+      summary: Get incoming stock
+      description: Returns an incoming stock
+      operationId: getIncomingStock
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncomingStock"
+        "403":
+          description: Forbidden
+        "404":
+          description: Incoming stock not found
   /outgoingStocks/:
     get:
       tags:
@@ -139,6 +200,27 @@ paths:
               schema:
                 $ref: "#/components/schemas/ListOutgoingStockResponse"
   /outgoingStocks/{outgoingStockId}/:
+    delete:
+      parameters:
+        - name: outgoingStockId
+          in: path
+          description: Id of the outgoing stock to delete
+          required: true
+          schema:
+            format: integer
+            type: number
+      tags:
+        - outgoing stock
+      summary: Delete outgoing stock
+      description: Deletes an outgoing stock
+      operationId: deleteOutgoingStock
+      responses:
+        "200":
+          description: successful operation
+        "403":
+          description: Forbidden
+        "404":
+          description: outgoing stock not found
     get:
       parameters:
         - name: outgoingStockId
@@ -160,27 +242,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OutgoingStock"
-        "404":
-          description: outgoing stock not found
-    delete:
-      parameters:
-        - name: outgoingStockId
-          in: path
-          description: Id of the outgoing stock to delete
-          required: true
-          schema:
-            format: integer
-            type: number
-      tags:
-        - outgoing stock
-      summary: Delete outgoing stock
-      description: Deletes an outgoing stock
-      operationId: deleteOutgoingStock
-      responses:
-        "200":
-          description: successful operation
-        "403":
-          description: Forbidden
         "404":
           description: outgoing stock not found
   /outgoingStocks/receipts/{receiptId}/:
@@ -751,6 +812,10 @@ components:
         - quantity
         - stockItem
       type: object
+    ListIncomingStockResponse:
+      items:
+        $ref: "#/components/schemas/IncomingStock"
+      type: array
     ListOutgoingStockResponse:
       items:
         $ref: "#/components/schemas/OutgoingStock"
@@ -835,6 +900,32 @@ components:
         - subtotal
         - total
       type: object
+    SupplierIncomingStock:
+      properties:
+        date:
+          format: date-time
+          type: string
+        id:
+          format: number
+          type: integer
+        invoiceNumber:
+          type: string
+        itemCost:
+          format: float
+          type: number
+        quantity:
+          format: integer
+          type: number
+        stockItem:
+          $ref: "#/components/schemas/SupplierIncomingStockStockItem"
+      required:
+        - date
+        - id
+        - invoiceNumber
+        - itemCost
+        - quantity
+        - stockItem
+      type: object
     IncomingStock:
       properties:
         date:
@@ -852,7 +943,9 @@ components:
           format: integer
           type: number
         stockItem:
-          $ref: "#/components/schemas/IncomingStockStockItem"
+          $ref: "#/components/schemas/SupplierIncomingStockStockItem"
+        supplier:
+          $ref: "#/components/schemas/IncomingStockSupplier"
       required:
         - date
         - id
@@ -860,6 +953,7 @@ components:
         - itemCost
         - quantity
         - stockItem
+        - supplier
       type: object
     OutgoingStock:
       properties:
@@ -891,7 +985,7 @@ components:
         - tax
         - total
       type: object
-    IncomingStockStockItem:
+    SupplierIncomingStockStockItem:
       properties:
         id:
           format: integer
@@ -1031,7 +1125,7 @@ components:
           type: number
         incomingStocks:
           items:
-            $ref: "#/components/schemas/IncomingStock"
+            $ref: "#/components/schemas/SupplierIncomingStock"
           type: array
         name:
           type: string
@@ -1045,6 +1139,20 @@ components:
         - items
         - name
         - phoneNumber
+      type: object
+    IncomingStockSupplier:
+      properties:
+        email:
+          type: string
+        id:
+          format: integer
+          type: number
+        name:
+          type: string
+      required:
+        - email
+        - id
+        - name
       type: object
     ShopStockItem:
       properties:
