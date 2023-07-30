@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from init import db
+from sqlalchemy import exists
 from flask_jwt_extended import jwt_required
 from models.receipt import Receipt, receipt_schema, receipts_schema
 from models.customer import Customer
@@ -52,13 +53,13 @@ def get_one_receipts(id):
 @jwt_required()
 def add_new_receipt():
     # Access to frontend data
-    body_data = receipt_schema.load(request.get_json())
+    body_data = request.get_json()
 
     # Create a new Receipt model instance using frontend data
     receipt = Receipt(
-        payment_method=body_data.get("payment_method"),
-        purchase_type=body_data.get("purchase_type"),
-        customer_id=body_data.get("customer_id"),
+        payment_method=body_data.get("paymentMethod"),
+        purchase_type=body_data.get("purchaseType"),
+        customer_id=body_data.get("customerId"),
         date=date.today(),
     )
     # Add that receipt to the session
@@ -77,20 +78,27 @@ def cancel_receipt(id):
     if not is_admin:
         return {"error": "Only Shop Manager can cancel receipts information"}, 403
 
-    # Access to frontend data
-    body_data = receipt_schema.load(request.get_json(), partial=True)
-    stmt = db.select(Receipt).filter_by(id=id)
-    receipt = db.session.scalar(stmt)
+    # Check if receipt exist
+    receipt_exists = db.session.query(exists().where(Receipt.id == id)).scalar()
+    receipt_status = Receipt.query.get(id)
+    # Check if receipt is active
+    if not receipt_status.is_active:
+        return {"message": f"Receipt with id {id} has already been CANCELLED"}
 
-    # Check if receipt exist in the database
-    if receipt:
-        # Update receipt status to "cancel"
-        receipt.status = body_data.get("status")
+    if receipt_exists and receipt_status.is_active:
+        # Access to frontend data
+        body_data = receipt_schema.load(request.get_json(), partial=True)
+        stmt = db.select(Receipt).filter_by(id=id)
+        receipt = db.session.scalar(stmt)
+        # Update receipt is_active to FALSE
+        receipt.is_active = body_data.get("is_active")
         # Add that receipt to the session
         db.session.add(receipt)
         # Commit session
         db.session.commit()
         # Respond to the client
-        return receipt_schema.dump(receipt), 201
+
+        return {"message": f"Receipt with id {id} has been CANCELLED successfully"}, 200
+
     else:
         return {"error": f"Receipt with id {id} not found"}, 404

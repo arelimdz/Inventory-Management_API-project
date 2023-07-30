@@ -22,7 +22,7 @@ class IncomingStock(db.Model):
     )
 
     # Register model relationships
-    supplier = db.relationship("Supplier", back_populates="incoming_stock")
+    supplier = db.relationship("Supplier", back_populates="incoming_stocks")
     stock_item = db.relationship("StockItem", back_populates="incoming_stocks")
 
     # Create a unique constraint on stock_item_id and invoice_number
@@ -40,7 +40,7 @@ class IncomingStockSchema(CamelCasedSchema):
             "item_brand",
             "size",
             "sku",
-            "unit_price",
+            "unit_cost",
             "quantity",
         ],
     )
@@ -52,8 +52,8 @@ class IncomingStockSchema(CamelCasedSchema):
             "quantity",
             "item_cost",
             "invoice_number",
-            "supplier_id",
-            "stock_item_id",
+            "supplier",
+            "stock_item",
         )
 
 

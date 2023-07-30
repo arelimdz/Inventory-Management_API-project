@@ -20,8 +20,10 @@ outgoing_stocks_blueprint = Blueprint(
 @outgoing_stocks_blueprint.route("/", methods=["GET"])
 @jwt_required()
 def get_all_outgoing_stock():
+    print("hello areli")
     stmt = db.select(OutgoingStock).order_by(OutgoingStock.id)
     outgoing_stock = db.session.scalars(stmt)
+    print(outgoing_stock)
     return outgoing_stocks_schema.dump(outgoing_stock)
 
 
@@ -44,7 +46,7 @@ def add_outgoing_stock_event(id):
     receipt_exists = db.session.query(exists().where(Receipt.id == id)).scalar()
     receipt = Receipt.query.get(id)
 
-    if receipt_exists and receipt.status == "Active":
+    if receipt_exists and receipt.is_active:
         # Access frontend data
         body_data = outgoing_stock_schema.load(request.get_json())
         item_id = body_data.get("stock_item_id")
@@ -97,7 +99,7 @@ def add_outgoing_stock_event(id):
                             "error": f"Insufficient stock, {quantity_in_stock} pieces left"
                         }, 400
                 else:
-                    return {"error": f"Item with id {item_id} is discontinued"}
+                    return {"error": f"Item with id {item_id} is discontinued"}, 400
             else:
                 return {"error": f"Item with id {item_id} not found"}, 404
         else:

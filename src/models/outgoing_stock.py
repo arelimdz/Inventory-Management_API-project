@@ -29,13 +29,14 @@ class OutgoingStockSchema(CamelCasedSchema):
         exclude=[
             "markup_pct",
             "minimum_stock",
-            "incoming_stock",
-            "outgoing_stock",
             "id",
+            "unit_cost",
+            "status",
+            "special_tax",
         ],
     )
     receipt = fields.Nested(
-        "ReceiptSchema", exclude=["outgoing_stocks"], dump_only=True
+        "ReceiptSchema", exclude=["outgoing_stocks", "is_active"], dump_only=True
     )
 
     class Meta:
@@ -48,6 +49,7 @@ class OutgoingStockSchema(CamelCasedSchema):
             "tax",
             "subtotal",
             "total",
+            
         )
 
 

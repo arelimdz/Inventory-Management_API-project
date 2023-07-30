@@ -13,7 +13,7 @@ class Receipt(db.Model):
     total = db.Column(db.Numeric(10, 2), default=0)
     discount = db.Column(db.Numeric(10, 2), default=0)
     subtotal = db.Column(db.Numeric(10, 2), default=0)
-    status = db.Column(db.String, nullable=False, default="Active")
+    is_active = db.Column(db.Boolean, default=True)
 
     # Information from frontend
     payment_method = db.Column(db.String, nullable=False)
@@ -45,7 +45,7 @@ class ReceiptSchema(CamelCasedSchema):
             "purchase_type",
             "customer",
             "outgoing_stocks",
-            "status",
+            "is_active",
         )
 
 

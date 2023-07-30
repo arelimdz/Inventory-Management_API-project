@@ -1,6 +1,10 @@
 from init import db
-from marshmallow import fields
 from .CamelCasedSchema import CamelCasedSchema
+from marshmallow import fields, validates
+from marshmallow.validate import OneOf
+from marshmallow.exceptions import ValidationError
+
+VALID_STATUSES = ("Active", "Discontinued", "Broken", "Incomplete")
 
 
 # Declare StockItem model and its attributes
@@ -47,6 +51,13 @@ class StockItemSchema(CamelCasedSchema):
         fields.Nested("OutgoingStockSchema", exclude=["stock_item"])
     )
 
+    status = fields.String(validate=OneOf(VALID_STATUSES))
+
+    @validates("status")
+    def validate_status(self, value):
+        if value not in VALID_STATUSES:
+            raise ValidationError(f"Invalid status. Must be one of {VALID_STATUSES}.")
+
     class Meta:
         fields = (
             "id",
@@ -64,8 +75,6 @@ class StockItemSchema(CamelCasedSchema):
             "special_tax",
             "status",
             "shop_id",
-            "incoming_stocks",
-            "outgoing_stock",
         )
 
 

@@ -3,6 +3,9 @@ from init import db
 from flask_jwt_extended import jwt_required
 from models.customer import Customer, customer_schema, customers_schema
 from controllers.auth_controller import authorise_as_admin
+from sqlalchemy.exc import IntegrityError
+from psycopg2 import errorcodes
+
 
 customers_blueprint = Blueprint("customers", __name__, url_prefix="/customers")
 
@@ -31,25 +34,31 @@ def add_new_customer():
     is_admin = authorise_as_admin()
     if not is_admin:
         return {"error": "Only Shop Manager can register new customers"}, 403
+    try:
+        # Access to frontend data
+        body_data = customer_schema.load(request.get_json())
 
-    # Access to frontend data
-    body_data = customer_schema.load(request.get_json())
+        # Create a new Customer model instance using frontend data
+        customer = Customer(
+            name=body_data.get("name"),
+            email=body_data.get("email"),
+            address=body_data.get("address"),
+            city=body_data.get("city"),
+            phone_number=body_data.get("phone_number"),
+            authorised_discount=body_data.get("authorised_discount"),
+        )
+        # Add that customer to the session
+        db.session.add(customer)
+        # Commit session
+        db.session.commit()
+        # Respond to the client
+        return customer_schema.dump(customer), 201
 
-    # Create a new Customer model instance using frontend data
-    customer = Customer(
-        name=body_data.get("name"),
-        email=body_data.get("email"),
-        address=body_data.get("address"),
-        city=body_data.get("city"),
-        phone_number=body_data.get("phone_number"),
-        authorised_discount=body_data.get("authorised_discount"),
-    )
-    # Add that customer to the session
-    db.session.add(customer)
-    # Commit session
-    db.session.commit()
-    # Respond to the client
-    return customer_schema.dump(customer), 201
+    except IntegrityError as err:
+        if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
+            return {"error": "Customer name already exist"}, 409
+        if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
+            return {"error": f"The {err.orig.diag.column_name} is required"}, 409
 
 
 @customers_blueprint.route("/<int:id>", methods=["PATCH", "PUT"])

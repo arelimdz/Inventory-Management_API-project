@@ -20,11 +20,12 @@ def auth_registrer():
         user.name = body_data.get("name")
         user.email = body_data.get("email")
         user.role = body_data.get("role")
+        user.shop_id = body_data.get("shopId")
         if body_data.get("password"):
             user.password = bcrypt.generate_password_hash(
                 body_data.get("password")
             ).decode("utf-8")
-
+        print(user.email)
         # Add the user to the session
         db.session.add(user)
         # Commit to add the user to the database
@@ -36,7 +37,7 @@ def auth_registrer():
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
             return {"error": "The email address is already in use"}, 409
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
-            return {"error": f"The {err.orig.diag.column_name} is required"}, 409
+            return {"error": f"The {err.orig.diag.column_name} is required"}, 400
 
 
 @auth_blueprint.route("/login", methods=["POST"])

@@ -10,11 +10,11 @@ class Supplier(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
-    phone_number = db.Column(db.String)
-    address = db.Column(db.String)
+    phone_number = db.Column(db.String, nullable=False)
+    address = db.Column(db.String, nullable=False)
 
     # Register model relationships
-    incoming_stock = db.relationship("IncomingStock", back_populates="supplier")
+    incoming_stocks = db.relationship("IncomingStock", back_populates="supplier")
 
 
 # Create a Supplier schema usign marshmallow
@@ -24,7 +24,7 @@ class SupplierSchema(CamelCasedSchema):
     )
 
     class Meta:
-        fields = ("id", "name", "email", "phone_number", "address", "incoming_stock")
+        fields = ("id", "name", "email", "phone_number", "address", "incoming_stocks")
 
 
 # Declare Supplier schema to be able to retrieve information to the frontend
