@@ -557,7 +557,7 @@ The planning of this project was done by dividing the activities into three part
   - Label name: README
   - Activity belongs to: The documentation in README
 
-You can find the assignment and description of the activities in more detail in the [Inventory Management System- Project Trello board](https://trello.com/invite/b/tgFTQwfJ/ATTIc57943c1fd1e8fbbdb95e8200289672c009A9831/inventory-management-system-api-project)
+You can find the assignment and description of the activities in more detail in the [Inventory Management System- Project Trello board](https://trello.com/b/tgFTQwfJ)
 
 Here are some screenshots at different times of the project:
 
